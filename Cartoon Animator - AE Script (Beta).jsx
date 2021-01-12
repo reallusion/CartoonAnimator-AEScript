@@ -153,11 +153,12 @@
         this.value = parseFloat( value );
     }
 
-    function pivotObject( time, x, y ) {
+    function pivotObject( time, x, y, z ) {
 
         this.time = parseFloat( time / 1000 );
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     function backgroundObject( name, hasAudio, count ) {
@@ -268,7 +269,8 @@
 
                 var pivotObj = new pivotObject( jsonScene.comps[ i ].compObj.pivot[ j ].time,
                                                 jsonScene.comps[ i ].compObj.pivot[ j ].x,
-                                                jsonScene.comps[ i ].compObj.pivot[ j ].y );
+                                                jsonScene.comps[ i ].compObj.pivot[ j ].y,
+                                                jsonScene.comps[ i ].compObj.pivot[ j ].z );
                 comp.compObj.pivot.push( pivotObj );
             }
 
@@ -740,7 +742,7 @@
     // ======================== | CTALaunch | ========================
     var CTALaunch = {};
 
-    CTALaunch.version = 0.0;
+    CTALaunch.version = 0.1;
     CTALaunch.scriptName = "Cartoon Animator - AE Script (Beta)";
     CTALaunch.about = "In order to link an animated project into AE, kindly import the Cartoon Animator JSON file.";
     CTALaunch.linkInfo = "This script works with Cartoon Animator. If you haven’t installed Cartoon Animator yet. The free trial version is available here.";
@@ -854,7 +856,7 @@
          myPanel.grp.splashGroup.logoImage.image = CTALaunch.UI.logoImage;
          myPanel.grp.splashGroup.logoImage.size = [ 190, 30 ];
 
-         myPanel.grp.importGroup.versionText.text = "Beta 1.0";
+         myPanel.grp.importGroup.versionText.text = "Beta 1.01";
 
          setupMaxScreenSize();
          myPanel.grp.logGroup.panel.printGroup.maximumSize = [ CTALaunch.maxScreenWidth, CTALaunch.maxScreenHeight ];
@@ -1736,7 +1738,7 @@
         var layerAnchor = layer.anchorPoint;
 
         // AE default anchor point is in the middle of image
-        var imageCenter = { "x": layer.source.width / 2, "y": layer.source.height / 2 };
+        var imageCenter = { "x": layer.source.width / 2, "y": layer.source.height / 2, "z": 0 };
         var anchorKeys = CTALaunch.Layer.Calculate.AnchorPoint( jsonComp.compObj, imageCenter );
 
         // add keys
@@ -1744,12 +1746,13 @@
 
             var pivotOffsetX = anchorKeys[ i ].x;
             var pivotOffsetY = anchorKeys[ i ].y;
+            var pivotOffsetZ = anchorKeys[ i ].z;
             var keyTime = anchorKeys[ i ].time;
 
             try {
 
                 var index = layerAnchor.addKey( keyTime );
-                layerAnchor.setValueAtKey( index, [ pivotOffsetX, pivotOffsetY ] );
+                layerAnchor.setValueAtKey( index, [ pivotOffsetX, pivotOffsetY, pivotOffsetZ ] );
                 layerAnchor.setInterpolationTypeAtKey( index, KeyframeInterpolationType.HOLD );
             }
             catch ( e ) {
@@ -1849,6 +1852,7 @@
         var keys = [];
         var jsonPivotCount = compObj.pivot.length;
 
+        var camRatio = CTALaunch.cameraRatio;
         var sceneRatio = CTALaunch.sceneRatio.scene;
         var fps = CTAScene.fps;
 
@@ -1857,11 +1861,12 @@
             var pivot = compObj.pivot[ i ];
 
             var xValue = imageCenter.x - pivot.x / sceneRatio;
-            var yValue = imageCenter.y + pivot.y / sceneRatio;
+            var yValue = imageCenter.y + pivot.z / sceneRatio;
+            var zValue = imageCenter.z - pivot.y * camRatio;
             var keyTime = Math.round( ( pivot.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
             keyTime = Math.round( keyTime ) / fps;
 
-            keys.push( { "time": keyTime, "x": xValue, "y": yValue } );
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue, "z": zValue } );
         }
 
         return keys;
