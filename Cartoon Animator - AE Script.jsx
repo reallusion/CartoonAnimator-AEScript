@@ -19,15 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Cartoon Animator - AE Script. If not, see {@link http://www.gnu.org/licenses/}.
 */
-(function (thisObj) {
+var CTAScene  = {};
+var CTALaunch = {};
+
+( function( thisObj ) {
 
     // ========================= | CTASystem | ==========================
     var CTASystem = {};
     CTASystem.debug = false;
 
     // ====================== | CTAScene Data  | ========================
-    var CTAScene = {};
-
     CTAScene.version = 0.0;
     CTAScene.name = "";
     CTAScene.width = 0;
@@ -55,28 +56,28 @@
         this.compList = [];
     }
 
-    function camera(camLens) {
+    function camera( camLens ) {
 
-        this.camLens = parseInt(camLens, 10);
+        this.camLens = parseInt( camLens, 10 );
         this.rotObjs = [];
         this.posObjs = [];
     }
 
-    function camRotObject(time, value) {
+    function camRotObject( time, value ) {
 
-        this.time = parseFloat(time / 1000);
-        this.value = parseFloat(value);
+        this.time = parseFloat( time / 1000 );
+        this.value = parseFloat( value );
     }
 
-    function camPosObject(time, x, y, z) {
+    function camPosObject( time, x, y, z ) {
 
-        this.time = parseFloat(time / 1000);
-        this.x = parseFloat(x);
-        this.y = parseFloat(y);
-        this.z = parseFloat(z);
+        this.time = parseFloat( time / 1000 );
+        this.x =  parseFloat( x );
+        this.y =  parseFloat( y );
+        this.z =  parseFloat( z );
     }
 
-    function composition(name, replaceTgt, isThreeD, hasAudio, hasVideo) {
+    function composition( name, replaceTgt, isThreeD, hasAudio, hasVideo ) {
 
         this.name = name;
         this.replaceTgt = replaceTgt;
@@ -88,13 +89,13 @@
         this.layerObjs = [];
 
         // version 1.0
-        this.hasVideo = (hasVideo == undefined) ? false : hasVideo;
+        this.hasVideo = ( hasVideo == undefined ) ? false : hasVideo;
     }
 
-    function compObject(name, count) {
+    function compObject( name, count ) {
 
         this.fileName = name;
-        this.count = parseInt(count, 10);
+        this.count = parseInt( count, 10 );
         this.pivot = [];
         this.rotObjs = [];
         this.posObjs = [];
@@ -102,74 +103,74 @@
         this.depth = [];
     }
 
-    function scaleValue(scaleX, scaleY, scaleZ) {
+    function scaleValue( scaleX, scaleY, scaleZ ) {
 
-        this.scaleX = parseFloat(scaleX);
-        this.scaleY = parseFloat(scaleY);
-        this.scaleZ = parseFloat(scaleZ);
+        this.scaleX =  parseFloat( scaleX );
+        this.scaleY =  parseFloat( scaleY );
+        this.scaleZ =  parseFloat( scaleZ );
     }
 
-    function layerObject(name, count, pivot) {
+    function layerObject( name, count, pivot ) {
 
         this.fileName = name;
-        this.count = parseInt(count, 10);
-        this.pivotX = parseFloat(pivot.x);
-        this.pivotY = parseFloat(pivot.y);
+        this.count = parseInt( count, 10 );
+        this.pivotX = parseFloat( pivot.x );
+        this.pivotY = parseFloat( pivot.y );
         this.posObjs = [];
         this.depth = [];
     }
 
-    function rotObject(time, x, y, z) {
+    function rotObject( time, x, y, z ) {
 
-        this.time = parseFloat(time / 1000);
-        this.x = parseFloat(x);
-        this.y = parseFloat(y);
-        this.z = parseFloat(z);
+        this.time = parseFloat( time / 1000 );
+        this.x =  parseFloat( x );
+        this.y =  parseFloat( y );
+        this.z =  parseFloat( z );
     }
 
-    function posObject(time, x, y, z) {
+    function posObject( time, x, y, z ) {
 
-        this.time = parseFloat(time / 1000);
-        this.x = parseFloat(x);
-        this.y = parseFloat(y);
-        this.z = parseFloat(z);
+        this.time = parseFloat( time / 1000 );
+        this.x =  parseFloat( x );
+        this.y =  parseFloat( y );
+        this.z =  parseFloat( z );
     }
 
-    function scaleObject(time, x, y, z) {
+    function scaleObject( time, x, y, z ) {
 
-        this.time = parseFloat(time / 1000);
-        this.x = parseFloat(x);
-        this.y = parseFloat(y);
-        this.z = parseFloat(z);
+        this.time = parseFloat( time / 1000 );
+        this.x =  parseFloat( x );
+        this.y =  parseFloat( y );
+        this.z =  parseFloat( z );
     }
 
-    function depthObject(time, value) {
+    function depthObject( time, value ) {
 
-        this.time = parseFloat(time / 1000);
-        this.value = parseFloat(value);
+        this.time = parseFloat( time / 1000 );
+        this.value = parseFloat( value );
     }
 
-    function pivotObject(time, x, y, z) {
+    function pivotObject( time, x, y, z ) {
 
-        this.time = parseFloat(time / 1000);
+        this.time = parseFloat( time / 1000 );
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    function backgroundObject(name, hasAudio, count, hasVideo) {
-
+    function backgroundObject( name, hasAudio, count, hasVideo ) {
+        
         this.fileName = name;
         this.hasAudio = hasAudio;
-        this.count = parseInt(count, 10);
+        this.count = parseInt( count, 10 );
 
         // version 1.0
-        this.hasVideo = (hasVideo == undefined) ? false : hasVideo;
+        this.hasVideo = ( hasVideo == undefined ) ? false : hasVideo;
     }
 
-    function isEmptyObject(object) {
+    function isEmptyObject( object ) {
 
-        for (var key in object) {
+        for ( var key in object ) {
 
             return false;
         }
@@ -177,143 +178,150 @@
     }
 
 
-    CTAScene.loadJsonFile = function (path) {
+    CTAScene.loadJsonFile = function ( path ) {
 
         CTAScene.loaded = false;
 
-        var jsonObj = CTAScene.JsPass.parseJson(path);
-        if (jsonObj == '') {
+        var jsonObj = CTAScene.JsPass.parseJson( path );
+        if ( jsonObj == '' )  {
             return;
         }
 
         CTAScene.name = jsonObj.name;
         CTAScene.version = jsonObj.version;
-        CTAScene.width = parseInt(jsonObj.width, 10);
-        CTAScene.height = parseInt(jsonObj.height, 10);
-        CTAScene.fps = parseFloat(jsonObj.fps);
+        CTAScene.width = parseInt( jsonObj.width, 10 );
+        CTAScene.height = parseInt( jsonObj.height, 10 );
+        CTAScene.fps = parseFloat( jsonObj.fps );
         CTAScene.smartType = jsonObj.smartType;
         CTAScene.preMulti = jsonObj.preMulti;
         CTAScene.loadBgm = jsonObj.loadBgm;
 
-        CTAScene.viewCornerLT = [jsonObj.viewCornerLT.x, jsonObj.viewCornerLT.y, jsonObj.viewCornerLT.z];
-        CTAScene.viewCornerRB = [jsonObj.viewCornerRB.x, jsonObj.viewCornerRB.y, jsonObj.viewCornerRB.z];
+        CTAScene.viewCornerLT = [ jsonObj.viewCornerLT.x, jsonObj.viewCornerLT.y, jsonObj.viewCornerLT.z ];
+        CTAScene.viewCornerRB = [ jsonObj.viewCornerRB.x, jsonObj.viewCornerRB.y, jsonObj.viewCornerRB.z ];
 
         // ========================= version 1.0 ============================ //
-        if (CTAScene.version >= 1.0) {
+        if ( CTAScene.version >= 1.0 ) {
 
-            CTAScene.projectAudio = [jsonObj.projectAudio.music, jsonObj.projectAudio.soundFX1, jsonObj.projectAudio.soundFX2];
+            CTAScene.projectAudio = [ jsonObj.projectAudio.music, jsonObj.projectAudio.soundFX1, jsonObj.projectAudio.soundFX2 ];
         }
 
         CTAScene.Create = new sceneObject();
-        CTAScene.loadSceneData(CTAScene.Create, jsonObj.Create);
+        CTAScene.loadSceneData( CTAScene.Create, jsonObj.Create );
+
+        // test data
+        if ( undefined != jsonObj.Test ) {
+            
+            CTAScene.TestString = jsonObj.Test;
+        }
 
         CTAScene.loaded = true;
     }
 
-    CTAScene.loadSceneData = function (scene, jsonScene) {
+    CTAScene.loadSceneData = function ( scene, jsonScene ) {
 
-        if (!jsonScene) {
+        if ( !jsonScene ) {
 
             return;
         }
 
-        scene.startFrame = parseInt(jsonScene.startFrame, 10);
-        scene.endFrame = parseInt(jsonScene.endFrame, 10);
-        scene.sceneRatio = parseFloat(jsonScene.sceneRatio);
+        scene.startFrame = parseInt( jsonScene.startFrame, 10 );
+        scene.endFrame = parseInt( jsonScene.endFrame, 10 );
+        scene.sceneRatio = parseFloat( jsonScene.sceneRatio );
 
         var i = 0;
         /////////////////////////////////////////////////
-        if (!isEmptyObject(jsonScene.camera)) {
+        if ( !isEmptyObject( jsonScene.camera ) ) {
 
-            scene.camera = new camera(jsonScene.camera.camLens);
+            scene.camera = new camera( jsonScene.camera.camLens );
 
-            for (i = 0; i < jsonScene.camera.rotObjs.length; ++i) {
+            for ( i = 0; i < jsonScene.camera.rotObjs.length; ++i ) {
 
-                var rotObj = new camRotObject(jsonScene.camera.rotObjs[i].time,
-                    jsonScene.camera.rotObjs[i].value);
-                scene.camera.rotObjs.push(rotObj);
+                var rotObj = new camRotObject( jsonScene.camera.rotObjs[ i ].time,
+                                               jsonScene.camera.rotObjs[ i ].value );
+                scene.camera.rotObjs.push( rotObj );
             }
 
-            for (i = 0; i < jsonScene.camera.posObjs.length; ++i) {
+            for ( i = 0; i < jsonScene.camera.posObjs.length; ++i ) {
 
-                var posObj = new camPosObject(jsonScene.camera.posObjs[i].time,
-                    jsonScene.camera.posObjs[i].x,
-                    jsonScene.camera.posObjs[i].y,
-                    jsonScene.camera.posObjs[i].z);
-                scene.camera.posObjs.push(posObj);
+                var posObj = new camPosObject( jsonScene.camera.posObjs[ i ].time,
+                                               jsonScene.camera.posObjs[ i ].x,
+                                               jsonScene.camera.posObjs[ i ].y,
+                                               jsonScene.camera.posObjs[ i ].z );
+                scene.camera.posObjs.push( posObj );
             }
         }
 
         /////////////////////////////////////////////////
         scene.compList = [];
 
-        for (i = 0; i < jsonScene.comps.length; ++i) {
+        for ( i = 0; i < jsonScene.comps.length; ++i ) {
 
-            var comp = new composition(jsonScene.comps[i].name,
-                jsonScene.comps[i].replaceTgt,
-                jsonScene.comps[i].isThreeD,
-                jsonScene.comps[i].hasAudio,
-                jsonScene.comps[i].hasVideo);
+            var comp = new composition( jsonScene.comps[ i ].name,
+                                        jsonScene.comps[ i ].replaceTgt,
+                                        jsonScene.comps[ i ].isThreeD,
+                                        jsonScene.comps[ i ].hasAudio,
+                                        jsonScene.comps[ i ].hasVideo );
 
-            comp.compScale = new scaleValue(jsonScene.comps[i].compScale.scaleX,
-                jsonScene.comps[i].compScale.scaleY,
-                jsonScene.comps[i].compScale.scaleZ);
+            comp.compScale = new scaleValue( jsonScene.comps[ i ].compScale.scaleX,
+                                             jsonScene.comps[ i ].compScale.scaleY,
+                                             jsonScene.comps[ i ].compScale.scaleZ );
             // compObj
-            comp.compObj = new compObject(jsonScene.comps[i].compObj.fileName,
-                jsonScene.comps[i].compObj.count);
+            comp.compObj = new compObject( jsonScene.comps[ i ].compObj.fileName,
+                                           jsonScene.comps[ i ].compObj.count );
 
             var j = 0;
-            for (j = 0; j < jsonScene.comps[i].compObj.pivot.length; ++j) {
+            for ( j = 0; j < jsonScene.comps[ i ].compObj.pivot.length; ++j ) {
 
-                var pivotObj = new pivotObject(jsonScene.comps[i].compObj.pivot[j].time,
-                    jsonScene.comps[i].compObj.pivot[j].x,
-                    jsonScene.comps[i].compObj.pivot[j].y,
-                    jsonScene.comps[i].compObj.pivot[j].z);
-                comp.compObj.pivot.push(pivotObj);
+                var pivotObj = new pivotObject( jsonScene.comps[ i ].compObj.pivot[ j ].time,
+                                                jsonScene.comps[ i ].compObj.pivot[ j ].x,
+                                                jsonScene.comps[ i ].compObj.pivot[ j ].y,
+                                                jsonScene.comps[ i ].compObj.pivot[ j ].z );
+                comp.compObj.pivot.push( pivotObj );
             }
 
-            for (j = 0; j < jsonScene.comps[i].compObj.rotObjs.length; ++j) {
+            for ( j = 0; j < jsonScene.comps[ i ].compObj.rotObjs.length; ++j ) {
 
-                var rotObj = new rotObject(jsonScene.comps[i].compObj.rotObjs[j].time,
-                    jsonScene.comps[i].compObj.rotObjs[j].x,
-                    jsonScene.comps[i].compObj.rotObjs[j].y,
-                    jsonScene.comps[i].compObj.rotObjs[j].z);
-                comp.compObj.rotObjs.push(rotObj);
+                var rotObj = new rotObject( jsonScene.comps[ i ].compObj.rotObjs[ j ].time,
+                                            jsonScene.comps[ i ].compObj.rotObjs[ j ].x,
+                                            jsonScene.comps[ i ].compObj.rotObjs[ j ].y,
+                                            jsonScene.comps[ i ].compObj.rotObjs[ j ].z );
+                comp.compObj.rotObjs.push( rotObj );
             }
 
-            for (j = 0; j < jsonScene.comps[i].compObj.posObjs.length; ++j) {
+            for ( j = 0; j < jsonScene.comps[ i ].compObj.posObjs.length; ++j ) {
 
-                var posObj = new posObject(jsonScene.comps[i].compObj.posObjs[j].time,
-                    jsonScene.comps[i].compObj.posObjs[j].x,
-                    jsonScene.comps[i].compObj.posObjs[j].y,
-                    jsonScene.comps[i].compObj.posObjs[j].z);
-                comp.compObj.posObjs.push(posObj);
+                var posObj = new posObject( jsonScene.comps[ i ].compObj.posObjs[ j ].time,
+                                            jsonScene.comps[ i ].compObj.posObjs[ j ].x,
+                                            jsonScene.comps[ i ].compObj.posObjs[ j ].y,
+                                            jsonScene.comps[ i ].compObj.posObjs[ j ].z );
+                comp.compObj.posObjs.push( posObj );
             }
 
-            for (j = 0; j < jsonScene.comps[i].compObj.scaleObjs.length; ++j) {
+            for ( j = 0; j < jsonScene.comps[ i ].compObj.scaleObjs.length; ++j ) {
 
-                var scaleObj = new scaleObject(jsonScene.comps[i].compObj.scaleObjs[j].time,
-                    jsonScene.comps[i].compObj.scaleObjs[j].x,
-                    jsonScene.comps[i].compObj.scaleObjs[j].y,
-                    jsonScene.comps[i].compObj.scaleObjs[j].z);
-                comp.compObj.scaleObjs.push(scaleObj);
+                var scaleObj = new scaleObject( jsonScene.comps[ i ].compObj.scaleObjs[ j ].time,
+                                                jsonScene.comps[ i ].compObj.scaleObjs[ j ].x,
+                                                jsonScene.comps[ i ].compObj.scaleObjs[ j ].y,
+                                                jsonScene.comps[ i ].compObj.scaleObjs[ j ].z );
+                comp.compObj.scaleObjs.push( scaleObj );
             }
 
-            for (j = 0; j < jsonScene.comps[i].compObj.depth.length; ++j) {
+            for ( j = 0; j < jsonScene.comps[ i ].compObj.depth.length; ++j ) {
 
-                var depthLayer = new depthObject(jsonScene.comps[i].compObj.depth[j].time,
-                    jsonScene.comps[i].compObj.depth[j].value);
-                comp.compObj.depth.push(depthLayer);
+                var depthLayer = new depthObject( jsonScene.comps[ i ].compObj.depth[ j ].time,
+                                                  jsonScene.comps[ i ].compObj.depth[ j ].value );
+                comp.compObj.depth.push( depthLayer );
             }
 
-            scene.compList.push(comp);
+            scene.compList.push( comp );
         }
+        
+        if ( jsonScene.background ) {
 
-        if (jsonScene.background) {
-            scene.background = new backgroundObject(jsonScene.background.filename,
-                jsonScene.background.hasAudio,
-                jsonScene.background.count,
-                jsonScene.background.hasVideo);
+            scene.background = new backgroundObject( jsonScene.background.filename, 
+                                                     jsonScene.background.hasAudio, 
+                                                     jsonScene.background.count,
+                                                     jsonScene.background.hasVideo );
         }
     }
 
@@ -321,39 +329,39 @@
     // ==================== | CTAScene Json Pass  | =====================
     CTAScene.JsPass = {};
 
-    CTAScene.JsPass.readFile = function (file, encoding) {
-        if (typeof encoding === 'undefined') encoding = 'UTF-8';
+    CTAScene.JsPass.readFile = function ( file,encoding ) {
+        if ( typeof encoding === 'undefined' ) encoding = 'UTF-8';
 
         //open and parse file
-        file.encoding = encoding;
-        if (!file.open('r')) {
+    	file.encoding = encoding;
+    	if ( !file.open( 'r' ) ) {
 
             return '';
-        }
+         }
 
         var data = file.read();
-        file.close();
-        return data;
+    	file.close();
+    	return data;
     }
 
-    CTAScene.JsPass.parseJson = function (file) {
-        //open and parse file
-        var json = CTAScene.JsPass.readFile(file, 'UTF-8');
-        if (json == '') {
+    CTAScene.JsPass.parseJson = function ( file ) {
+    	//open and parse file
+    	var json = CTAScene.JsPass.readFile( file, 'UTF-8' );
+    	if ( json == '' ) {
 
             return null;
-        }
+         }
 
         var data = {};
-        try {
+    	try {
 
-            data = CTAScene.JSON.parse(json);
+            data = CTAScene.JSON.parse( json );
         }
-        catch (e) {
+        catch ( e ) {
 
-            if (CTASystem.debug) alert(e.description + '\n\nJSON DATA:\n\n' + json);
+            if ( CTASystem.debug ) alert( e.description + '\n\nJSON DATA:\n\n' + json );
         }
-        return data;
+    	return data;
     }
 
 
@@ -424,10 +432,10 @@
 
         function quote(string) {
 
-            // If the string contains no control characters, no quote characters, and no
-            // backslash characters, then we can safely slap some quotes around it.
-            // Otherwise we must also replace the offending characters with safe escape
-            // sequences.
+    // If the string contains no control characters, no quote characters, and no
+    // backslash characters, then we can safely slap some quotes around it.
+    // Otherwise we must also replace the offending characters with safe escape
+    // sequences.
 
             rx_escapable.lastIndex = 0;
             return rx_escapable.test(string)
@@ -443,7 +451,7 @@
 
         function str(key, holder) {
 
-            // Produce a string from holder[key].
+    // Produce a string from holder[key].
 
             var i;          // The loop counter.
             var k;          // The member key.
@@ -453,7 +461,7 @@
             var partial;
             var value = holder[key];
 
-            // If the value has a toJSON method, call it to obtain a replacement value.
+    // If the value has a toJSON method, call it to obtain a replacement value.
 
             if (
                 value
@@ -463,133 +471,133 @@
                 value = value.toJSON(key);
             }
 
-            // If we were called with a replacer function, then call the replacer to
-            // obtain a replacement value.
+    // If we were called with a replacer function, then call the replacer to
+    // obtain a replacement value.
 
             if (typeof rep === "function") {
                 value = rep.call(holder, key, value);
             }
 
-            // What happens next depends on the value's type.
+    // What happens next depends on the value's type.
 
             switch (typeof value) {
-                case "string":
-                    return quote(value);
+            case "string":
+                return quote(value);
 
-                case "number":
+            case "number":
 
-                    // JSON numbers must be finite. Encode non-finite numbers as null.
+    // JSON numbers must be finite. Encode non-finite numbers as null.
 
-                    return (isFinite(value))
-                        ? String(value)
-                        : "null";
+                return (isFinite(value))
+                    ? String(value)
+                    : "null";
 
-                case "boolean":
-                case "null":
+            case "boolean":
+            case "null":
 
-                    // If the value is a boolean or null, convert it to a string. Note:
-                    // typeof null does not produce "null". The case is included here in
-                    // the remote chance that this gets fixed someday.
+    // If the value is a boolean or null, convert it to a string. Note:
+    // typeof null does not produce "null". The case is included here in
+    // the remote chance that this gets fixed someday.
 
-                    return String(value);
+                return String(value);
 
-                // If the type is "object", we might be dealing with an object or an array or
-                // null.
+    // If the type is "object", we might be dealing with an object or an array or
+    // null.
 
-                case "object":
+            case "object":
 
-                    // Due to a specification blunder in ECMAScript, typeof null is "object",
-                    // so watch out for that case.
+    // Due to a specification blunder in ECMAScript, typeof null is "object",
+    // so watch out for that case.
 
-                    if (!value) {
-                        return "null";
+                if (!value) {
+                    return "null";
+                }
+
+    // Make an array to hold the partial results of stringifying this object value.
+
+                gap += indent;
+                partial = [];
+
+    // Is the value an array?
+
+                if (Object.prototype.toString.apply(value) === "[object Array]") {
+
+    // The value is an array. Stringify every element. Use null as a placeholder
+    // for non-JSON values.
+
+                    length = value.length;
+                    for (i = 0; i < length; i += 1) {
+                        partial[i] = str(i, value) || "null";
                     }
 
-                    // Make an array to hold the partial results of stringifying this object value.
-
-                    gap += indent;
-                    partial = [];
-
-                    // Is the value an array?
-
-                    if (Object.prototype.toString.apply(value) === "[object Array]") {
-
-                        // The value is an array. Stringify every element. Use null as a placeholder
-                        // for non-JSON values.
-
-                        length = value.length;
-                        for (i = 0; i < length; i += 1) {
-                            partial[i] = str(i, value) || "null";
-                        }
-
-                        // Join all of the elements together, separated with commas, and wrap them in
-                        // brackets.
-
-                        v = partial.length === 0
-                            ? "[]"
-                            : gap
-                                ? (
-                                    "[\n"
-                                    + gap
-                                    + partial.join(",\n" + gap)
-                                    + "\n"
-                                    + mind
-                                    + "]"
-                                )
-                                : "[" + partial.join(",") + "]";
-                        gap = mind;
-                        return v;
-                    }
-
-                    // If the replacer is an array, use it to select the members to be stringified.
-
-                    if (rep && typeof rep === "object") {
-                        length = rep.length;
-                        for (i = 0; i < length; i += 1) {
-                            if (typeof rep[i] === "string") {
-                                k = rep[i];
-                                v = str(k, value);
-                                if (v) {
-                                    partial.push(quote(k) + (
-                                        (gap)
-                                            ? ": "
-                                            : ":"
-                                    ) + v);
-                                }
-                            }
-                        }
-                    } else {
-
-                        // Otherwise, iterate through all of the keys in the object.
-
-                        for (k in value) {
-                            if (Object.prototype.hasOwnProperty.call(value, k)) {
-                                v = str(k, value);
-                                if (v) {
-                                    partial.push(quote(k) + (
-                                        (gap)
-                                            ? ": "
-                                            : ":"
-                                    ) + v);
-                                }
-                            }
-                        }
-                    }
-
-                    // Join all of the member texts together, separated with commas,
-                    // and wrap them in braces.
+    // Join all of the elements together, separated with commas, and wrap them in
+    // brackets.
 
                     v = partial.length === 0
-                        ? "{}"
+                        ? "[]"
                         : gap
-                            ? "{\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "}"
-                            : "{" + partial.join(",") + "}";
+                            ? (
+                                "[\n"
+                                + gap
+                                + partial.join(",\n" + gap)
+                                + "\n"
+                                + mind
+                                + "]"
+                            )
+                            : "[" + partial.join(",") + "]";
                     gap = mind;
                     return v;
+                }
+
+    // If the replacer is an array, use it to select the members to be stringified.
+
+                if (rep && typeof rep === "object") {
+                    length = rep.length;
+                    for (i = 0; i < length; i += 1) {
+                        if (typeof rep[i] === "string") {
+                            k = rep[i];
+                            v = str(k, value);
+                            if (v) {
+                                partial.push(quote(k) + (
+                                    (gap)
+                                        ? ": "
+                                        : ":"
+                                ) + v);
+                            }
+                        }
+                    }
+                } else {
+
+    // Otherwise, iterate through all of the keys in the object.
+
+                    for (k in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, k)) {
+                            v = str(k, value);
+                            if (v) {
+                                partial.push(quote(k) + (
+                                    (gap)
+                                        ? ": "
+                                        : ":"
+                                ) + v);
+                            }
+                        }
+                    }
+                }
+
+    // Join all of the member texts together, separated with commas,
+    // and wrap them in braces.
+
+                v = partial.length === 0
+                    ? "{}"
+                    : gap
+                        ? "{\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "}"
+                        : "{" + partial.join(",") + "}";
+                gap = mind;
+                return v;
             }
         }
 
-        // If the JSON object does not yet have a stringify method, give it one.
+    // If the JSON object does not yet have a stringify method, give it one.
 
         if (typeof CTAScene.JSON.stringify !== "function") {
             meta = {    // table of character substitutions
@@ -603,32 +611,32 @@
             };
             CTAScene.JSON.stringify = function (value, replacer, space) {
 
-                // The stringify method takes a value and an optional replacer, and an optional
-                // space parameter, and returns a JSON text. The replacer can be a function
-                // that can replace values, or an array of strings that will select the keys.
-                // A default replacer method can be provided. Use of the space parameter can
-                // produce text that is more easily readable.
+    // The stringify method takes a value and an optional replacer, and an optional
+    // space parameter, and returns a JSON text. The replacer can be a function
+    // that can replace values, or an array of strings that will select the keys.
+    // A default replacer method can be provided. Use of the space parameter can
+    // produce text that is more easily readable.
 
                 var i;
                 gap = "";
                 indent = "";
 
-                // If the space parameter is a number, make an indent string containing that
-                // many spaces.
+    // If the space parameter is a number, make an indent string containing that
+    // many spaces.
 
                 if (typeof space === "number") {
                     for (i = 0; i < space; i += 1) {
                         indent += " ";
                     }
 
-                    // If the space parameter is a string, it will be used as the indent string.
+    // If the space parameter is a string, it will be used as the indent string.
 
                 } else if (typeof space === "string") {
                     indent = space;
                 }
 
-                // If there is a replacer, it must be a function or an array.
-                // Otherwise, throw an error.
+    // If there is a replacer, it must be a function or an array.
+    // Otherwise, throw an error.
 
                 rep = replacer;
                 if (replacer && typeof replacer !== "function" && (
@@ -638,28 +646,28 @@
                     throw new Error("JSON.stringify");
                 }
 
-                // Make a fake root object containing our value under the key of "".
-                // Return the result of stringifying the value.
+    // Make a fake root object containing our value under the key of "".
+    // Return the result of stringifying the value.
 
-                return str("", { "": value });
+                return str("", {"": value});
             };
         }
 
 
-        // If the JSON object does not yet have a parse method, give it one.
+    // If the JSON object does not yet have a parse method, give it one.
 
         if (typeof CTAScene.JSON.parse !== "function") {
             CTAScene.JSON.parse = function (text, reviver) {
 
-                // The parse method takes a text and an optional reviver function, and returns
-                // a JavaScript value if the text is a valid JSON text.
+    // The parse method takes a text and an optional reviver function, and returns
+    // a JavaScript value if the text is a valid JSON text.
 
                 var j;
 
                 function walk(holder, key) {
 
-                    // The walk method is used to recursively walk the resulting structure so
-                    // that modifications can be made.
+    // The walk method is used to recursively walk the resulting structure so
+    // that modifications can be made.
 
                     var k;
                     var v;
@@ -680,9 +688,9 @@
                 }
 
 
-                // Parsing happens in four stages. In the first stage, we replace certain
-                // Unicode characters with escape sequences. JavaScript handles many characters
-                // incorrectly, either silently deleting them, or treating them as line endings.
+    // Parsing happens in four stages. In the first stage, we replace certain
+    // Unicode characters with escape sequences. JavaScript handles many characters
+    // incorrectly, either silently deleting them, or treating them as line endings.
 
                 text = String(text);
                 rx_dangerous.lastIndex = 0;
@@ -695,18 +703,18 @@
                     });
                 }
 
-                // In the second stage, we run the text against regular expressions that look
-                // for non-JSON patterns. We are especially concerned with "()" and "new"
-                // because they can cause invocation, and "=" because it can cause mutation.
-                // But just to be safe, we want to reject all unexpected forms.
+    // In the second stage, we run the text against regular expressions that look
+    // for non-JSON patterns. We are especially concerned with "()" and "new"
+    // because they can cause invocation, and "=" because it can cause mutation.
+    // But just to be safe, we want to reject all unexpected forms.
 
-                // We split the second stage into 4 regexp operations in order to work around
-                // crippling inefficiencies in IE's and Safari's regexp engines. First we
-                // replace the JSON backslash pairs with "@" (a non-JSON character). Second, we
-                // replace all simple value tokens with "]" characters. Third, we delete all
-                // open brackets that follow a colon or comma or that begin the text. Finally,
-                // we look to see that the remaining characters are only whitespace or "]" or
-                // "," or ":" or "{" or "}". If that is so, then the text is safe for eval.
+    // We split the second stage into 4 regexp operations in order to work around
+    // crippling inefficiencies in IE's and Safari's regexp engines. First we
+    // replace the JSON backslash pairs with "@" (a non-JSON character). Second, we
+    // replace all simple value tokens with "]" characters. Third, we delete all
+    // open brackets that follow a colon or comma or that begin the text. Finally,
+    // we look to see that the remaining characters are only whitespace or "]" or
+    // "," or ":" or "{" or "}". If that is so, then the text is safe for eval.
 
                 if (
                     rx_one.test(
@@ -717,22 +725,22 @@
                     )
                 ) {
 
-                    // In the third stage we use the eval function to compile the text into a
-                    // JavaScript structure. The "{" operator is subject to a syntactic ambiguity
-                    // in JavaScript: it can begin a block or an object literal. We wrap the text
-                    // in parens to eliminate the ambiguity.
+    // In the third stage we use the eval function to compile the text into a
+    // JavaScript structure. The "{" operator is subject to a syntactic ambiguity
+    // in JavaScript: it can begin a block or an object literal. We wrap the text
+    // in parens to eliminate the ambiguity.
 
                     j = eval("(" + text + ")");
 
-                    // In the optional fourth stage, we recursively walk the new structure, passing
-                    // each name/value pair to a reviver function for possible transformation.
+    // In the optional fourth stage, we recursively walk the new structure, passing
+    // each name/value pair to a reviver function for possible transformation.
 
                     return (typeof reviver === "function")
-                        ? walk({ "": j }, "")
+                        ? walk({"": j}, "")
                         : j;
                 }
 
-                // If the text is not JSON parseable, then a SyntaxError is thrown.
+    // If the text is not JSON parseable, then a SyntaxError is thrown.
 
                 throw new SyntaxError("JSON.parse");
             };
@@ -740,33 +748,31 @@
     }());
 
     // ======================== | CTALaunch | ========================
-    var CTALaunch = {};
-
-    CTALaunch.version = 1.0;
-    CTALaunch.scriptName = "Cartoon Animator - AE Script";
-    CTALaunch.about = "In order to link an animated project into AE, kindly import the Cartoon Animator JSON file.";
-    CTALaunch.linkInfo = "This script works with Cartoon Animator. If you haven’t installed Cartoon Animator yet. The free trial version is available here.";
-    CTALaunch.linkAlert = "Please tick the \"Allow Scripts to Write Files and Access Network\" in Preferences > ";
-    CTALaunch.trialUrl = "https://www.reallusion.com/linkcount/linkcount.aspx?lid=CA4en80";
-    CTALaunch.resrcUrl = "https://www.reallusion.com/linkcount/linkcount.aspx?lid=CA4en81";
+    CTALaunch.version      = 1.1;
+    CTALaunch.scriptName   = "Cartoon Animator - AE Script";
+    CTALaunch.about        = "In order to link an animated project into AE, kindly import the Cartoon Animator JSON file.";
+    CTALaunch.linkInfo     = "This script works with Cartoon Animator. If you haven’t installed Cartoon Animator yet. The free trial version is available here.";
+    CTALaunch.linkAlert    = "Please tick the \"Allow Scripts to Write Files and Access Network\" in Preferences > ";
+    CTALaunch.trialUrl     = "https://www.reallusion.com/linkcount/linkcount.aspx?lid=CA5en80";
+    CTALaunch.resrcUrl     = "https://www.reallusion.com/linkcount/linkcount.aspx?lid=CA5en81";
     CTALaunch.versionAlert = "Failed to load file. The file may have been saved in a newer version; please update your Cartoon Animator / After Effect Script to the latest version.";
-    CTALaunch.importLog = [];
+    CTALaunch.importLog    = [];
 
     // function
-    CTALaunch.UI = {};
-    CTALaunch.Import = {};
-    CTALaunch.Create = {};
-    CTALaunch.Comp = {};
-    CTALaunch.Comp.Add = {};
-    CTALaunch.Comp.Sort = {};
-    CTALaunch.Camera = {};
-    CTALaunch.Audio = {};
+    CTALaunch.UI            = {};
+    CTALaunch.Import        = {};
+    CTALaunch.Create        = {};
+    CTALaunch.Comp          = {};
+    CTALaunch.Comp.Add      = {};
+    CTALaunch.Comp.Sort     = {};
+    CTALaunch.Camera        = {};
+    CTALaunch.Audio         = {};
     CTALaunch.Audio.Project = {};
-    CTALaunch.Video = {};
-    CTALaunch.Layer = {};
-    CTALaunch.ImageLayer = {};
-    CTALaunch.Background = {};
-    CTALaunch.Source = {};
+    CTALaunch.Video         = {};
+    CTALaunch.Layer         = {};
+    CTALaunch.ImageLayer    = {};
+    CTALaunch.Background    = {};
+    CTALaunch.Source        = {};
 
     // parameter
     CTALaunch.jsonType = { none: 0, basic: 1, smart: 2 };
@@ -777,20 +783,20 @@
     CTALaunch.standardFps = 29.97;
     CTALaunch.maxScreenWidth = 9999;
     CTALaunch.maxScreenHeight = 9999;
-    CTALaunch.projectAudioName = ["Music", "Sound_FX1", "Sound_FX2"];
+    CTALaunch.projectAudioName = [ "Music", "Sound_FX1", "Sound_FX2" ];
     CTALaunch.cameraName = "CTACamera";
     CTALaunch.composition = {};
     CTALaunch.folder = {};
-
+    
 
     // ======================= | User Interface | ======================
-    CTALaunch.UI.Create = function (thisObj, scriptName) {
+    CTALaunch.UI.Create = function ( thisObj, scriptName ) {
 
-        var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", scriptName, undefined, { resizeable: true, closeButton: true });
+        var myPanel = ( thisObj instanceof Panel ) ? thisObj : new Window( "palette", scriptName, undefined, { resizeable: true, closeButton: true } );
 
-        if (myPanel == null) throw "Failed to create UI";
+        if ( myPanel == null ) throw "Failed to create UI";
 
-        myPanel.margins = [15, 15, 15, 15];
+        myPanel.margins = [ 15, 15, 15, 15];
         myPanel.spacing = 0;
 
         res = "group { orientation: 'column',\
@@ -854,86 +860,86 @@
                                         }\
                      }";
 
-        myPanel.grp = myPanel.add(res);
+         myPanel.grp = myPanel.add( res );
 
-        myPanel.grp.splashGroup.logoText.text = CTALaunch.about;
-        myPanel.grp.splashGroup.logoImage.image = CTALaunch.UI.logoImage;
-        myPanel.grp.splashGroup.logoImage.size = [190, 30];
+         myPanel.grp.splashGroup.logoText.text = CTALaunch.about;
+         myPanel.grp.splashGroup.logoImage.image = CTALaunch.UI.logoImage;
+         myPanel.grp.splashGroup.logoImage.size = [ 190, 30 ];
 
-        myPanel.grp.importGroup.versionText.text = "v2.0";
+         myPanel.grp.importGroup.versionText.text = "v2.0";
 
-        setupMaxScreenSize();
-        myPanel.grp.logGroup.panel.printGroup.maximumSize = [CTALaunch.maxScreenWidth, CTALaunch.maxScreenHeight];
+         setupMaxScreenSize();
+         myPanel.grp.logGroup.panel.printGroup.maximumSize = [ CTALaunch.maxScreenWidth, CTALaunch.maxScreenHeight ];
 
-        myPanel.grp.infoGroup.infoText.text = CTALaunch.linkInfo;
+         myPanel.grp.infoGroup.infoText.text = CTALaunch.linkInfo;
 
-        Image.prototype.onDraw = function () {
-            // written by Marc Autret
-            // "this" is the container; "this.image" is the graphic
-            if (!this.image) return;
-            var WH = this.size,
-                wh = this.image.size,
-                k = Math.min(WH[0] / wh[0], WH[1] / wh[1]),
-                xy;
-            // Resize proportionally:
-            wh = [k * wh[0], k * wh[1]];
-            // Center:
-            xy = [(WH[0] - wh[0]) / 2, (WH[1] - wh[1]) / 2];
-            this.graphics.drawImage(this.image, xy[0], xy[1], wh[0], wh[1]);
-            WH = wh = xy = null;
-        }
+         Image.prototype.onDraw = function() {
+             // written by Marc Autret
+             // "this" is the container; "this.image" is the graphic
+             if ( !this.image ) return;
+             var WH = this.size,
+             wh = this.image.size,
+             k = Math.min( WH[ 0 ] / wh[ 0 ], WH[ 1 ] / wh[ 1 ] ),
+             xy;
+             // Resize proportionally:
+             wh = [ k * wh[ 0 ], k * wh[ 1 ] ];
+             // Center:
+             xy = [ ( WH[ 0 ] - wh[ 0 ] ) / 2, ( WH[ 1 ] - wh[ 1 ] ) / 2 ];
+             this.graphics.drawImage( this.image, xy[ 0 ], xy[ 1 ], wh[ 0 ], wh[ 1 ] );
+             WH = wh = xy = null;
+         }
 
-        myPanel.grp.importGroup.importButton.onClick = function () {
+         myPanel.grp.importGroup.importButton.onClick = function () {
 
-            importButtonClicked();
-        }
+             importButtonClicked();
+         }
 
-        myPanel.grp.infoGroup.linkGroup.trialButton.onClick = function () {
+         myPanel.grp.infoGroup.linkGroup.trialButton.onClick = function () {
 
-            trialButtonClicked();
-        }
+             trialButtonClicked();
+         }
 
-        myPanel.grp.infoGroup.linkGroup.resrcButton.onClick = function () {
+         myPanel.grp.infoGroup.linkGroup.resrcButton.onClick = function () {
 
-            resrcButtonClicked();
-        }
+             resrcButtonClicked();
+         }
 
-        myPanel.grp.logGroup.panel.scrollbar.onChanging = function () {
+         myPanel.grp.logGroup.panel.scrollbar.onChanging = function () {
 
-            scrollbarValueChange();
-        }
+             scrollbarValueChange();
+         }
 
-        myPanel.onShow = function () {
+         myPanel.onShow = function() {
 
-            CTALaunch.UI.UpdateScrollbar();
+             CTALaunch.UI.UpdateScrollbar();
 
-            myPanel.layout.layout(true);
-            myPanel.layout.resize();
-        }
+             myPanel.layout.layout( true );
+             myPanel.layout.resize();
+         }
 
-        myPanel.onResizing = myPanel.onResize = function () {
+         myPanel.onResizing = myPanel.onResize = function () {
 
-            CTALaunch.UI.UpdateScrollbar();
+             CTALaunch.UI.UpdateScrollbar();
 
-            myPanel.layout.resize();
+             myPanel.layout.resize();
 
-            if (CTALaunch.mainUI.grp.logGroup.panel.scrollbar.enabled) {
+             if ( CTALaunch.mainUI.grp.logGroup.panel.scrollbar.enabled ) {
 
-                scrollbarValueChange();
-            }
-        }
+                 scrollbarValueChange();
+             }
+         }
 
-        myPanel.layout.layout(true);
-        myPanel.layout.resize();
+         myPanel.layout.layout( true );
+         myPanel.layout.resize();
 
-        CTALaunch.mainUI = myPanel;
+         CTALaunch.mainUI = myPanel;
     }
 
-    CTALaunch.UI.Show = function (thisObj) {
+    CTALaunch.UI.Show = function ( thisObj ) {
 
-        CTALaunch.UI.Create(thisObj, CTALaunch.scriptName);
+        CTALaunch.UI.Create( thisObj, CTALaunch.scriptName );
 
-        if (CTALaunch.mainUI != null && CTALaunch.mainUI instanceof Window) {
+        if ( CTALaunch.mainUI != null && CTALaunch.mainUI instanceof Window ) {
 
             CTALaunch.mainUI.center();
             CTALaunch.mainUI.show();
@@ -946,7 +952,7 @@
         // 16 = text height, 5 = margin
         var totalTxtHeight = CTALaunch.importLog.length * 16 + 5;
 
-        if (logPanel.size.height > totalTxtHeight) {
+        if ( logPanel.size.height > totalTxtHeight ) {
 
             logPanel.scrollbar.enabled = false;
             logPanel.scrollbar.value = 0;
@@ -957,29 +963,29 @@
         }
     }
 
-    CTALaunch.UI.UpdateImportLog = function (logString) {
+    CTALaunch.UI.UpdateImportLog = function ( logString ) {
 
-        CTALaunch.importLog.push(logString);
+        CTALaunch.importLog.push( logString );
 
         var logPanel = CTALaunch.mainUI.grp.logGroup.panel;
 
-        var text = logPanel.printGroup.add('statictext', undefined, logString);
-        text.alignment = ['left', 'top'];
+        var text = logPanel.printGroup.add ( 'statictext', undefined, logString );
+        text.alignment = [ 'left', 'top' ];
 
         CTALaunch.UI.UpdateScrollbar();
 
-        CTALaunch.mainUI.layout.layout(true);
+        CTALaunch.mainUI.layout.layout( true );
         CTALaunch.mainUI.layout.resize();
 
-        var buffer = Math.floor(logPanel.size.height / 16);
-        if (CTALaunch.importLog.length > buffer) {
+        var buffer = Math.floor( logPanel.size.height / 16 );
+        if ( CTALaunch.importLog.length > buffer ) {
 
             logPanel.scrollbar.value = logPanel.scrollbar.maxvalue;
-            logPanel.printGroup.location.y = -1 * (CTALaunch.importLog.length - buffer) * 16;
+            logPanel.printGroup.location.y = -1 * ( CTALaunch.importLog.length - buffer ) * 16;
         }
 
         // update can only work in window
-        if (CTALaunch.mainUI instanceof Window) {
+        if ( CTALaunch.mainUI instanceof Window ) {
 
             CTALaunch.mainUI.update();
         }
@@ -988,7 +994,7 @@
     CTALaunch.UI.ResetLog = function () {
 
         var logTxtLength = CTALaunch.importLog.length;
-        if (logTxtLength == 0) {
+        if ( logTxtLength == 0 ) {
 
             return;
         }
@@ -996,14 +1002,14 @@
 
         var logPanel = CTALaunch.mainUI.grp.logGroup.panel;
 
-        while (logPanel.printGroup.children.length > 0) {
+        while ( logPanel.printGroup.children.length > 0 ) {
 
-            logPanel.printGroup.remove(logPanel.printGroup.children[0]);
+            logPanel.printGroup.remove( logPanel.printGroup.children[ 0 ] );
         }
 
         CTALaunch.UI.UpdateScrollbar();
 
-        CTALaunch.mainUI.layout.layout(true);
+        CTALaunch.mainUI.layout.layout( true );
         CTALaunch.mainUI.layout.resize();
     }
 
@@ -1013,15 +1019,15 @@
         var currentSize = logPanel.size;
 
         logPanel.maximumSize = currentSize;
-        logPanel.printGroup.alignment = ['left', 'top'];
+        logPanel.printGroup.alignment = [ 'left', 'top' ];
     }
 
     CTALaunch.UI.PostSettings = function () {
 
         var logPanel = CTALaunch.mainUI.grp.logGroup.panel;
 
-        logPanel.maximumSize = [CTALaunch.maxScreenWidth, CTALaunch.maxScreenHeight];
-        logPanel.printGroup.alignment = ['left', 'fill'];
+        logPanel.maximumSize = [ CTALaunch.maxScreenWidth, CTALaunch.maxScreenHeight ];
+        logPanel.printGroup.alignment = [ 'left', 'fill' ];
     }
 
     function setupMaxScreenSize() {
@@ -1030,10 +1036,10 @@
         var screenWidth = 0;
         var screenHeight = 0;
 
-        for (var i = 0; i < allScreens.length; ++i) {
+        for ( var i = 0; i < allScreens.length; ++i ) {
 
-            screenWidth = screenWidth + Math.abs(allScreens[i].right - allScreens[i].left);
-            screenHeight = screenHeight + Math.abs(allScreens[i].top - allScreens[i].bottom);
+            screenWidth = screenWidth + Math.abs( allScreens[ i ].right - allScreens[ i ].left );
+            screenHeight = screenHeight + Math.abs( allScreens[ i ].top - allScreens[ i ].bottom );
         }
 
         CTALaunch.maxScreenWidth = screenWidth;
@@ -1043,60 +1049,60 @@
     function importButtonClicked() {
 
         // select Json file
-        var file = File.openDialog("Select the CTA .json file.", 'JSON files:*.json, All files:*.*', false);
-        if (!file) {
+        var file = File.openDialog( "Select the CTA .json file.", 'JSON files:*.json, All files:*.*', false );
+        if ( !file ) {
 
             return;
         }
 
-        app.beginUndoGroup("import Json");
+        app.beginUndoGroup( "import Json" );
 
-        CTALaunch.Import.Start(file);
+            CTALaunch.Import.Start( file );
 
         app.endUndoGroup;
     }
 
     function trialButtonClicked() {
 
-        if (false == networkAccessCheck()) {
+        if ( false == networkAccessCheck() ) {
 
             return;
         }
-        openUrl(CTALaunch.trialUrl);
+        openUrl( CTALaunch.trialUrl );
     }
 
     function resrcButtonClicked() {
 
-        if (false == networkAccessCheck()) {
+        if ( false == networkAccessCheck() ) {
 
             return;
         }
-        openUrl(CTALaunch.resrcUrl);
+        openUrl( CTALaunch.resrcUrl );
     }
 
     function scrollbarValueChange() {
 
-        if (CTALaunch.importLog.length < 1) {
+        if ( CTALaunch.importLog.length < 1 ) {
 
             return;
         }
 
         var logPanel = CTALaunch.mainUI.grp.logGroup.panel;
-        var buffer = Math.floor(logPanel.size.height / 16);
-        var panelLocation = ((CTALaunch.importLog.length - buffer) * 16 / (logPanel.scrollbar.maxvalue)) * logPanel.scrollbar.value;
+        var buffer = Math.floor( logPanel.size.height / 16 );
+        var panelLocation = ( ( CTALaunch.importLog.length - buffer ) * 16 / ( logPanel.scrollbar.maxvalue ) ) * logPanel.scrollbar.value;
         logPanel.printGroup.location.y = -1 * panelLocation;
     }
 
     function networkAccessCheck() {
 
-        if (app.preferences.getPrefAsLong("Main Pref Section", "Pref_SCRIPTING_FILE_NETWORK_SECURITY") != 1) {
+        if ( app.preferences.getPrefAsLong( "Main Pref Section", "Pref_SCRIPTING_FILE_NETWORK_SECURITY" ) != 1 ) {
 
-            var appVersion = parseFloat(app.version);
+            var appVersion = parseFloat( app.version );
             var commandID = appVersion >= 16.1 ? 3131 : 2359;
             var preferenceTabName = appVersion >= 16.1 ? 'Scripting & Expressions' : 'General';
 
-            alert(CTALaunch.linkAlert + preferenceTabName);
-            app.executeCommand(commandID);
+            alert( CTALaunch.linkAlert + preferenceTabName );
+            app.executeCommand( commandID );
 
             return false;
         }
@@ -1104,69 +1110,69 @@
         return true;
     }
 
-    function openUrl(url) {
+    function openUrl( url ) {
 
         var osString = $.os;
-        var osVersion = (osString.indexOf("Windows") != -1) ? "Win" : "Mac";
+        var osVersion = ( osString.indexOf( "Windows" ) != -1 ) ? "Win" : "Mac";
 
-        if (osVersion == "Win") {
+        if ( osVersion == "Win" ) {
 
-            system.callSystem("cmd.exe /c Start " + url);
+            system.callSystem("cmd.exe /c Start " + url );
         }
         else {
 
-            system.callSystem("open " + url);
+            system.callSystem("open " + url );
         }
     }
 
 
     // ========================== | Import | ===========================
-    CTALaunch.Import.Start = function (file) {
+    CTALaunch.Import.Start = function( file ) {
 
         CTALaunch.UI.PreSettings();
         CTALaunch.UI.ResetLog();
 
-        var isImportSuccess = CTALaunch.Import.CreateJson(file);
-        if (isImportSuccess) {
+        var isImportSuccess = CTALaunch.Import.CreateJson( file );
+        if ( isImportSuccess ) {
 
             CTALaunch.Create.Start();
             // wait fo AE view create finished
-            $.sleep(300);
+            $.sleep( 300 );
 
-            CTALaunch.UI.UpdateImportLog("Import project success!");
-            alert("Import project completed!");
+            CTALaunch.UI.UpdateImportLog( "Import project success!" );
+            alert( "Import project completed!" );
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Import project failed.");
+            CTALaunch.UI.UpdateImportLog( "Import project failed." );
         }
 
         CTALaunch.UI.PostSettings();
     }
 
-    CTALaunch.Import.CreateJson = function (file) {
+    CTALaunch.Import.CreateJson = function ( file ) {
 
         try {
 
-            CTAScene.loadJsonFile(file);
+            CTAScene.loadJsonFile( file );
         }
-        catch (e) {
+        catch ( e ) {
 
             // data error while loading
-            CTALaunch.UI.UpdateImportLog("Load json file failed.");
+            CTALaunch.UI.UpdateImportLog( "Load json file failed." );
             return false;
         }
 
         CTAScene.filePath = file.parent.absoluteURI + '/' + CTAScene.name;
 
-        if (false == CTALaunch.Import.VersionCheck()) {
+        if ( false == CTALaunch.Import.VersionCheck() ) {
 
+            alert( CTALaunch.versionAlert );
             return false;
         }
-
         CTALaunch.Import.ProjectNameCheck();
 
-        CTALaunch.UI.UpdateImportLog("Load json file completed.");
+        CTALaunch.UI.UpdateImportLog( "Load json file completed." );
         return true;
     }
 
@@ -1178,21 +1184,25 @@
 
     CTALaunch.Import.VersionCheck = function () {
 
-        if (CTALaunch.version != CTAScene.version) {
+        var isAllowedVersion = false;
 
-            alert(CTALaunch.versionAlert);
-            return false;
+        if ( Math.floor( CTALaunch.version ) == Math.floor( CTAScene.version ) ) {
+
+            if ( CTALaunch.version >= CTAScene.version ) {
+
+                isAllowedVersion = true;
+            }
         }
 
-        return true;
+        return isAllowedVersion;
     }
 
     CTALaunch.Import.ProjectNameCheck = function () {
 
         var mainFolder = getCTAMainFolder();
-        if (mainFolder) {
+        if ( mainFolder ) {
 
-            CTALaunch.appendMode = true;
+            CTALaunch.appendMode = true;           
         }
         else {
 
@@ -1206,17 +1216,17 @@
 
         var createScene = CTAScene.Create;
         CTALaunch.Create.Initial();
-        CTALaunch.Create.Project(createScene);
-        CTALaunch.Create.Setup(createScene);
+        CTALaunch.Create.Project( createScene );
+        CTALaunch.Create.Setup( createScene );
 
-        CTALaunch.Comp.Create(createScene);
+        CTALaunch.Comp.Create( createScene );
         CTALaunch.Comp.Select();
 
         CTALaunch.Comp.SortLayers();
     }
 
     CTALaunch.Create.Initial = function () {
-
+       
         CTALaunch.sceneRatio = { scene: 1, width: 1, height: 1 };
         CTALaunch.cameraRatio = 1;
         CTALaunch.timeShift = 0;
@@ -1227,68 +1237,68 @@
         CTALaunch.folder.content = null;
     }
 
-    CTALaunch.Create.Project = function (importScene) {
+    CTALaunch.Create.Project = function ( importScene ) {
 
-        if (CTALaunch.appendMode) {
+        if ( CTALaunch.appendMode ) {
 
             var project = getCTAProject();
-            CTALaunch.SetProject(project.comp, project.folder);
-
+            CTALaunch.SetProject( project.comp, project.folder );
+            
             return;
         }
-
-        var name = CTAScene.name;
-        var width = CTAScene.width;
-        var height = CTAScene.height;
+        
+        var name        = CTAScene.name;
+        var width       = CTAScene.width;
+        var height      = CTAScene.height;
         var pixelAspect = 1;
-        var duration = (importScene.endFrame - importScene.startFrame + 1) / CTALaunch.standardFps;
-        var frameRate = CTAScene.fps;
+        var duration    = ( importScene.endFrame - importScene.startFrame + 1 ) / CTALaunch.standardFps;
+        var frameRate   = CTAScene.fps;
 
-        var mainFolder = app.project.items.addFolder("CTA_" + CTAScene.name);
-        var mainComp = app.project.items.addComp(name, width, height, pixelAspect, duration, frameRate);
+        var mainFolder = app.project.items.addFolder( "CTA_" + CTAScene.name );
+        var mainComp   = app.project.items.addComp( name, width, height, pixelAspect, duration, frameRate );
         mainComp.parentFolder = mainFolder;
 
         // convert composition to 3D
         mainComp.threeDLayer = true;
 
         // Content
-        var contentFolder = app.project.items.addFolder("Content");
+        var contentFolder = app.project.items.addFolder( "Content" );
         contentFolder.parentFolder = mainFolder;
 
-        CTALaunch.SetProject({ main: mainComp },
-            { main: mainFolder, content: contentFolder });
+        CTALaunch.SetProject( { main: mainComp },
+                              { main: mainFolder, content: contentFolder } );
 
-        CTALaunch.UI.UpdateImportLog("Build AE project success.\n");
+        CTALaunch.UI.UpdateImportLog( "Build AE project success.\n" );
     }
 
-    CTALaunch.Create.Setup = function (importScene) {
+    CTALaunch.Create.Setup = function ( importScene ) {
 
         CTALaunch.Import.SetType();
-        CTALaunch.SetSceneRatio(importScene);
-        CTALaunch.SetCameraRatio(importScene);
+        CTALaunch.SetSceneRatio( importScene );
+        CTALaunch.SetCameraRatio( importScene );
         CTALaunch.SetTimeShift();
     }
 
 
     // ========================| Composition |==========================
-    CTALaunch.Comp.Create = function (importScene) {
+    CTALaunch.Comp.Create = function ( importScene ) {
 
         var mainComp = CTALaunch.composition.main;
 
         // background
-        CTALaunch.Comp.Add.Background(importScene, mainComp);
-        CTALaunch.Comp.Add.ProjectAudio(mainComp);
+        CTALaunch.Comp.Add.Background( importScene, mainComp );
+        CTALaunch.Comp.Add.ProjectAudio( mainComp );
 
         // Layers
-        CTALaunch.Comp.Add.Layer(importScene, mainComp);
+        CTALaunch.Comp.Add.Layer( importScene, mainComp );
 
         // Camera
-        if (CTALaunch.importType == CTALaunch.jsonType.smart) {
+        if ( CTALaunch.importType == CTALaunch.jsonType.smart ) {
 
-            if (false == CTALaunch.appendMode) {
+            if ( false == CTALaunch.appendMode ) {
 
-                CTALaunch.Comp.Add.Camera(importScene, mainComp);
-            }
+                CTALaunch.Comp.Add.Camera( importScene, mainComp );
+            }           
         }
     }
 
@@ -1296,9 +1306,9 @@
 
         function unSelectAllItem() {
 
-            for (var i = 1; i <= app.project.numItems; ++i) {
+            for ( var i = 1; i <= app.project.numItems; ++i ) {
 
-                app.project.items[i].selected = false;
+                app.project.items[ i ].selected = false;
             }
         }
 
@@ -1315,95 +1325,95 @@
         var sortIndex = 1;
         var comp = CTALaunch.composition.main;
 
-        sortIndex = CTALaunch.Comp.Sort.ImageLayer(comp, sortIndex);
-        sortIndex = CTALaunch.Comp.Sort.Camera(comp, sortIndex);
-        CTALaunch.Comp.Sort.Background(comp, sortIndex);
-
-        CTALaunch.UI.UpdateImportLog("Sort composition completed.");
+        sortIndex = CTALaunch.Comp.Sort.ImageLayer( comp, sortIndex );
+        sortIndex = CTALaunch.Comp.Sort.Camera( comp, sortIndex );
+        CTALaunch.Comp.Sort.Background( comp, sortIndex );
+        
+        CTALaunch.UI.UpdateImportLog( "Sort composition completed." );
     }
 
     // add
-    CTALaunch.Comp.Add.Layer = function (importScene, mainComp) {
+    CTALaunch.Comp.Add.Layer = function ( importScene, mainComp ) {
 
-        for (var i = 0; i < importScene.compList.length; ++i) {
+        for ( var i = 0; i < importScene.compList.length; ++i ) {
 
-            var jsonComp = importScene.compList[i];
+            var jsonComp = importScene.compList[ i ];
 
             // Append Mode
-            if (CTALaunch.appendMode && isProjectAlreadyExist(jsonComp.name)) {
+            if ( CTALaunch.appendMode && isProjectAlreadyExist( jsonComp.name ) ) {
 
                 continue;
             }
 
-            if (jsonComp.hasAudio && false === jsonComp.hasVideo) {
+            if ( jsonComp.hasAudio && false === jsonComp.hasVideo ) {
 
-                CTALaunch.Audio.Create(jsonComp.name, mainComp);
+                CTALaunch.Audio.Create( jsonComp.name, mainComp );
             }
 
             // check for image exists
-            if (jsonComp.compObj.count) {
+            if ( jsonComp.compObj.count ) {
 
-                if (jsonComp.isThreeD) {
+                if ( jsonComp.isThreeD ) {
 
-                    CTALaunch.Layer.Create(jsonComp, mainComp);
+                    CTALaunch.Layer.Create( jsonComp, mainComp );
                 }
                 else {
 
-                    CTALaunch.ImageLayer.Create(jsonComp, mainComp);
+                    CTALaunch.ImageLayer.Create( jsonComp, mainComp );
                 }
             }
         }
     }
 
-    CTALaunch.Comp.Add.ProjectAudio = function (mainComp) {
+    CTALaunch.Comp.Add.ProjectAudio = function ( mainComp ) {
 
-        CTALaunch.Audio.Project.Create(mainComp);
+        CTALaunch.Audio.Project.Create( mainComp );
     }
 
-    CTALaunch.Comp.Add.Camera = function (importScene, mainComp) {
+    CTALaunch.Comp.Add.Camera = function ( importScene, mainComp ) {
 
         var jsonCamera = importScene.camera;
-        if (isEmptyObject(jsonCamera)) {
+        if ( isEmptyObject( jsonCamera ) ) {
 
             return;
         }
 
-        CTALaunch.Camera.Create(jsonCamera, mainComp);
+        CTALaunch.Camera.Create( jsonCamera, mainComp );
     }
 
-    CTALaunch.Comp.Add.Background = function (importScene, mainComp) {
+    CTALaunch.Comp.Add.Background = function ( importScene, mainComp ) {
 
-        if (!importScene.background) {
+        if ( !importScene.background ) {
 
             return;
         }
 
         // Append Mode
-        if (CTALaunch.appendMode && isProjectAlreadyExist("Background")) {
+        if ( CTALaunch.appendMode && isProjectAlreadyExist( "Background" ) ) {
 
             return;
         }
 
         var jsonBackground = importScene.background;
-        if (jsonBackground.hasAudio && false === jsonBackground.hasVideo) {
+        if ( jsonBackground.hasAudio && false === jsonBackground.hasVideo ) {
 
             var audioName = "Background";
-            CTALaunch.Audio.Create(audioName, mainComp);
+            CTALaunch.Audio.Create( audioName, mainComp );
         }
-
-        CTALaunch.Background.Create(jsonBackground, mainComp);
+        
+        CTALaunch.Background.Create( jsonBackground, mainComp );
     }
 
     // sort
-    CTALaunch.Comp.Sort.ImageLayer = function (comp, index) {
+    CTALaunch.Comp.Sort.ImageLayer = function ( comp, index ) {
 
         var currentLayer;
         var layerCount = comp.numLayers;
 
-        for (var i = 2; i <= layerCount; ++i) {
+        for ( var i = 2; i <= layerCount; ++i ) {
 
-            currentLayer = comp.layers[i];
-            if (isNonAudioTwoDLayer(currentLayer) && "Background" != currentLayer.source.name) {
+            currentLayer = comp.layers[ i ];
+            if ( isNonAudioTwoDLayer( currentLayer ) && "Background" != currentLayer.source.name ) {
 
                 currentLayer.moveToBeginning();
                 index++;
@@ -1413,17 +1423,17 @@
         return index;
     }
 
-    CTALaunch.Comp.Sort.Camera = function (comp, index) {
+    CTALaunch.Comp.Sort.Camera = function ( comp, index ) {
 
         var currentLayer;
         var layerCount = comp.numLayers;
 
-        for (var i = index; i <= layerCount; ++i) {
+        for ( var i = index; i <= layerCount; ++i ) {
 
-            currentLayer = comp.layers[i];
-            if (currentLayer instanceof CameraLayer) {
-
-                if ("CTACamera" == currentLayer.name) {
+            currentLayer = comp.layers[ i ];
+            if ( currentLayer instanceof CameraLayer ) {
+                
+                if ( "CTACamera" == currentLayer.name ) {
 
                     currentLayer.moveToBeginning();
                     index++;
@@ -1435,15 +1445,15 @@
         return index;
     }
 
-    CTALaunch.Comp.Sort.Background = function (comp, index) {
-
+    CTALaunch.Comp.Sort.Background = function ( comp, index ) {
+           
         var currentLayer;
         var layerCount = comp.numLayers;
 
-        for (var i = index; i <= layerCount; ++i) {
+        for ( var i = index; i <= layerCount; ++i ) {
 
-            currentLayer = comp.layers[i];
-            if (isNonAudioTwoDLayer(currentLayer) && "Background" == currentLayer.source.name) {
+            currentLayer = comp.layers[ i ];
+            if ( isNonAudioTwoDLayer( currentLayer ) && "Background" == currentLayer.source.name ) {
 
                 currentLayer.moveToEnd();
                 break;
@@ -1453,13 +1463,13 @@
 
 
     // ========================= | Source | ============================
-    CTALaunch.Source.LoadImage = function (jsonCompObj, layerName) {
+    CTALaunch.Source.LoadImage = function ( jsonCompObj, layerName ) {
 
         // check for sequence image
         var isSequence = false;
         var folderPath = "";
 
-        if (jsonCompObj.count > 1) {
+        if ( jsonCompObj.count > 1 ) {
 
             isSequence = true;
             folderPath = CTAScene.filePath + '/Sequence Image/' + layerName;
@@ -1470,31 +1480,31 @@
             folderPath = CTAScene.filePath + '/Single Image/';
         }
         var imagePath = folderPath + '/' + jsonCompObj.fileName;
-
-        var image = new File(imagePath);
+        
+        var image = new File( imagePath );
         var imageSource = null;
 
         try {
 
-            var importOptions = new ImportOptions(image);
+            var importOptions = new ImportOptions( image );
             importOptions.sequence = isSequence;
             importOptions.importAs = ImportAsType.FOOTAGE;
 
-            var imageSource = app.project.importFile(importOptions);
-            if (isSequence) {
+            var imageSource = app.project.importFile( importOptions );
+            if ( isSequence ) {
 
                 imageSource.mainSource.conformFrameRate = CTAScene.fps;
             }
 
             imageSource.name = layerName;
         }
-        catch (e) {
+        catch ( e ) {
 
-            CTALaunch.UI.UpdateImportLog("Load " + jsonCompObj.fileName + " source file failed.");
+            CTALaunch.UI.UpdateImportLog( "Load " + jsonCompObj.fileName + " source file failed." );
             return;
         }
 
-        if (imageSource.mainSource.hasAlpha) {
+        if ( imageSource.mainSource.hasAlpha ) {
 
             imageSource.mainSource.alphaMode = CTAScene.preMulti ? AlphaMode.PREMULTIPLIED : AlphaMode.STRAIGHT;
         }
@@ -1502,26 +1512,26 @@
         return imageSource;
     }
 
-    CTALaunch.Source.LoadAudio = function (layerName) {
+    CTALaunch.Source.LoadAudio = function ( layerName ) {
 
         var folderPath = CTAScene.filePath + '/' + 'Audio';
 
         var audioPath = folderPath + '/' + layerName + '.wav';
-        var audioFile = new File(audioPath);
+        var audioFile = new File( audioPath );
 
         var audioSource = null;
         // audio file does not descripe in json, need to verify it first
-        if (audioFile.exists) {
+        if ( audioFile.exists ) {
 
             try {
 
-                var importOptions = new ImportOptions(audioFile);
-                audioSource = app.project.importFile(importOptions);
+                var importOptions = new ImportOptions( audioFile );
+                audioSource = app.project.importFile( importOptions );
                 audioSource.name = layerName;
             }
-            catch (e) {
+            catch ( e ) {
 
-                CTALaunch.UI.UpdateImportLog("Load " + layerName + " audio file failed.");
+                CTALaunch.UI.UpdateImportLog( "Load " + layerName + " audio file failed." );
                 return;
             }
         }
@@ -1529,26 +1539,26 @@
         return audioSource;
     }
 
-    CTALaunch.Source.LoadVideo = function (layerName) {
+    CTALaunch.Source.LoadVideo = function ( layerName ) {
 
         var folderPath = CTAScene.filePath + '/' + 'Video';
 
         var videoPath = folderPath + '/' + layerName + '.mov';
-        var videoFile = new File(videoPath);
+        var videoFile = new File( videoPath );
 
         var videoSource = null;
         // video file does not descripe in json, need to verify it first
-        if (videoFile.exists) {
+        if ( videoFile.exists ) {
 
             try {
 
-                var importOptions = new ImportOptions(videoFile);
-                videoSource = app.project.importFile(importOptions);
+                var importOptions = new ImportOptions( videoFile );
+                videoSource = app.project.importFile( importOptions );
                 videoSource.name = layerName;
             }
-            catch (e) {
+            catch ( e ) {
 
-                CTALaunch.UI.UpdateImportLog("Load " + layerName + " video file failed.");
+                CTALaunch.UI.UpdateImportLog( "Load " + layerName + " video file failed." );
                 return;
             }
         }
@@ -1557,63 +1567,65 @@
     }
 
     // ========================= | Camera | ============================
-    CTALaunch.Camera.Create = function (jsonCamera, mainComp) {
+    CTALaunch.Camera.Create = function ( jsonCamera, mainComp ) {
 
-        var aeCamera = mainComp.layers.addCamera(CTALaunch.cameraName, [CTAScene.width / 2, CTAScene.height / 2]);
+        var aeCamera = mainComp.layers.addCamera( CTALaunch.cameraName, [ CTAScene.width / 2, CTAScene.height / 2 ] );
 
         // set value zoom by focal length
         var value = jsonCamera.camLens * CTALaunch.cameraFLM;
-        aeCamera.zoom.setValue(value);
-        aeCamera.focusDistance.setValue(value);
+        aeCamera.zoom.setValue( value );
+        aeCamera.focusDistance.setValue( value );
 
-        CTALaunch.Camera.SetProperty(aeCamera, jsonCamera);
-        CTALaunch.UI.UpdateImportLog("Create camera layer completed.")
+        CTALaunch.Camera.SetProperty( aeCamera, jsonCamera );
+        CTALaunch.UI.UpdateImportLog( "Create camera layer completed.")
     }
 
-    CTALaunch.Camera.SetProperty = function (aeCamera, jsonCamera) {
+    CTALaunch.Camera.SetProperty = function ( aeCamera, jsonCamera ) {
 
-        if (false == (CTALaunch.Camera.Add.PositionKey(aeCamera, jsonCamera)
-            && CTALaunch.Camera.Add.RotateKey(aeCamera, jsonCamera))) {
+        if ( false == ( CTALaunch.Camera.Add.PositionKey( aeCamera, jsonCamera )
+                     && CTALaunch.Camera.Add.RotateKey( aeCamera, jsonCamera ) ) ) {
 
-            CTALaunch.UI.UpdateImportLog("Set camera layer properties failed.")
+            CTALaunch.UI.UpdateImportLog( "Set camera layer properties failed.")
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Set camera layer properties completed.")
+            CTALaunch.UI.UpdateImportLog( "Set camera layer properties completed.")
         }
     }
 
     // add
     CTALaunch.Camera.Add = {};
 
-    CTALaunch.Camera.Add.PositionKey = function (aeCamera, jsonCamera) {
+    CTALaunch.Camera.Add.PositionKey = function ( aeCamera, jsonCamera ) {
 
         var cameraPos = aeCamera.position;
         var cameraPOI = aeCamera.pointOfInterest;
 
-        var posKeys = CTALaunch.Camera.Calculate.Position(jsonCamera);
+        var posKeys = CTALaunch.Camera.Calculate.Position( jsonCamera );
 
-        for (var i = 0; i < posKeys.length; ++i) {
+        var value = jsonCamera.camLens * CTALaunch.cameraFLM;
 
-            var pos = jsonCamera.posObjs[i];
+        for ( var i = 0; i < posKeys.length; ++i ) {
 
-            var xTrans = posKeys[i].x;
-            var yTrans = posKeys[i].y;
-            var zTrans = posKeys[i].z;
+            var pos = jsonCamera.posObjs[ i ];
 
-            var keyTime = posKeys[i].time;
+            var xTrans = posKeys[ i ].x;
+            var yTrans = posKeys[ i ].y;
+            var zTrans = posKeys[ i ].z;
+
+            var keyTime = posKeys[ i ].time;
 
             try {
 
-                var index = cameraPos.addKey(keyTime);
-                cameraPOI.addKey(keyTime);
+                var index = cameraPos.addKey( keyTime );
+                cameraPOI.addKey( keyTime );
 
-                cameraPos.setValueAtKey(index, [xTrans, yTrans, zTrans]);
-                cameraPOI.setValueAtKey(index, [xTrans, yTrans, 0]);
+                cameraPos.setValueAtKey( index, [ xTrans, yTrans, zTrans ] );
+                cameraPOI.setValueAtKey( index, [ xTrans, yTrans, zTrans + value ] );
             }
-            catch (e) {
+            catch ( e ) {
 
-                //alert( e.message );
+				//alert( e.message );
                 return false;
             }
         }
@@ -1621,24 +1633,24 @@
         return true;
     }
 
-    CTALaunch.Camera.Add.RotateKey = function (aeCamera, jsonCamera) {
+    CTALaunch.Camera.Add.RotateKey = function ( aeCamera, jsonCamera ) {
 
         var jsonCamRotCount = jsonCamera.rotObjs.length;
         var cameraRot = aeCamera.zRotation;
 
-        var rotKeys = CTALaunch.Camera.Calculate.Rotation(jsonCamera);
+        var rotKeys = CTALaunch.Camera.Calculate.Rotation( jsonCamera );
 
-        for (var i = 0; i < rotKeys.length; ++i) {
+        for ( var i = 0; i < rotKeys.length; ++i ) {
 
-            var zRot = rotKeys[i].value;
-            var keyTime = rotKeys[i].time;
+            var zRot = rotKeys[ i ].value;
+            var keyTime = rotKeys[ i ].time;
 
             try {
 
-                var index = cameraRot.addKey(keyTime);
-                cameraRot.setValueAtKey(index, zRot);
+                var index = cameraRot.addKey( keyTime );
+                cameraRot.setValueAtKey( index, zRot );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -1651,7 +1663,7 @@
     // calculate
     CTALaunch.Camera.Calculate = {};
 
-    CTALaunch.Camera.Calculate.Position = function (cameraData) {
+    CTALaunch.Camera.Calculate.Position = function ( cameraData ) {
 
         var keys = [];
         var posLength = cameraData.posObjs.length;
@@ -1661,37 +1673,37 @@
         var transFactorX = CTALaunch.sceneRatio.width / CTALaunch.sceneRatio.scene;
         var transFactorY = CTALaunch.sceneRatio.height / CTALaunch.sceneRatio.scene;
 
-        for (var i = 0; i < posLength; ++i) {
+        for ( var i = 0; i < posLength; ++i ) {
 
-            var pos = cameraData.posObjs[i];
+            var pos = cameraData.posObjs[ i ];
 
             var xValue = pos.x * transFactorX;
             var yValue = -pos.z * transFactorY;
             var zValue = pos.y * camRatio;
-            var keyTime = Math.round((pos.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( pos.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue, "z": zValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue, "z": zValue } );
         }
 
         return keys;
     }
 
-    CTALaunch.Camera.Calculate.Rotation = function (cameraData) {
+    CTALaunch.Camera.Calculate.Rotation = function ( cameraData ) {
 
         var keys = [];
         var fps = CTAScene.fps;
 
         var rotLength = cameraData.rotObjs.length;
-        for (var i = 0; i < rotLength; ++i) {
+        for ( var i = 0; i < rotLength; ++i ) {
 
-            var rot = cameraData.rotObjs[i];
+            var rot = cameraData.rotObjs[ i ];
 
             var value = -rot.value;
-            var keyTime = Math.round((rot.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( rot.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "value": value });
+            keys.push( { "time": keyTime, "value": value } );
         }
 
         return keys;
@@ -1699,59 +1711,59 @@
 
 
     // ======================== | Layer |  =============================
-    CTALaunch.Layer.Create = function (jsonComp, mainComp) {
+    CTALaunch.Layer.Create = function ( jsonComp, mainComp ) {
 
         var fieSource;
 
-        if (jsonComp.hasVideo) {
+        if ( jsonComp.hasVideo ) {
 
-            fileSource = CTALaunch.Source.LoadVideo(jsonComp.name);
+            fileSource = CTALaunch.Source.LoadVideo( jsonComp.name );
         }
         else {
 
-            fileSource = CTALaunch.Source.LoadImage(jsonComp.compObj, jsonComp.name);
+            fileSource = CTALaunch.Source.LoadImage( jsonComp.compObj, jsonComp.name );
         }
-
-        if (fileSource) {
+        
+        if ( fileSource ) {
 
             fileSource.parentFolder = CTALaunch.folder.content;
-            mainComp.layers.add(fileSource);
+            mainComp.layers.add( fileSource );
 
-            var currentLayer = mainComp.layers[1];
+            var currentLayer = mainComp.layers[ 1 ];
             currentLayer.threeDLayer = true;
             currentLayer.selected = false;
 
-            CTALaunch.Layer.SetProperty(currentLayer, jsonComp);
-            CTALaunch.UI.UpdateImportLog("Create \"" + jsonComp.name + "\" object layer completed.");
+            CTALaunch.Layer.SetProperty( currentLayer, jsonComp );
+            CTALaunch.UI.UpdateImportLog( "Create \"" + jsonComp.name + "\" object layer completed." );
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Create \"" + jsonComp.name + "\" object layer failed.");
+            CTALaunch.UI.UpdateImportLog( "Create \"" + jsonComp.name + "\" object layer failed." );
         }
     }
 
-    CTALaunch.Layer.SetProperty = function (layer, jsonComp) {
+    CTALaunch.Layer.SetProperty = function ( layer, jsonComp ) {
 
-        switch (CTALaunch.importType) {
+        switch ( CTALaunch.importType ) {
 
             case CTALaunch.jsonType.basic: {
 
                 // setup layer order
-                if (false == CTALaunch.Layer.Add.PositionKeyByDepth(layer, jsonComp.compObj.depth)) {
+                if ( false == CTALaunch.Layer.Add.PositionKeyByDepth( layer, jsonComp.compObj.depth ) ) {
 
-                    CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties failed.");
+                    CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties failed." );
                     return;
                 }
                 break;
             }
             case CTALaunch.jsonType.smart: {
 
-                if (false == (CTALaunch.Layer.Add.PositionKey(layer, jsonComp)
-                    && CTALaunch.Layer.Add.AnchorPointKey(layer, jsonComp)
-                    && CTALaunch.Layer.Add.ScaleKey(layer, jsonComp)
-                    && CTALaunch.Layer.Add.RotationKey(layer, jsonComp))) {
+                if ( false == ( CTALaunch.Layer.Add.PositionKey( layer, jsonComp )
+                             && CTALaunch.Layer.Add.AnchorPointKey( layer, jsonComp )
+                             && CTALaunch.Layer.Add.ScaleKey( layer, jsonComp )
+                             && CTALaunch.Layer.Add.RotationKey( layer, jsonComp ) ) ) {
 
-                    CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties failed.");
+                    CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties failed." );
                     return;
                 }
                 break;
@@ -1761,37 +1773,37 @@
                 return;
         }
 
-        CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties completed.");
+        CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties completed." );
     }
 
     // add
     CTALaunch.Layer.Add = {};
 
-    CTALaunch.Layer.Add.PositionKeyByDepth = function (layer, depth) {
+    CTALaunch.Layer.Add.PositionKeyByDepth = function ( layer, depth ) {
 
         var layerPos = layer.position;
         layerPos.dimensionsSeparated = true;
 
-        var zPos = layerPos.getSeparationFollower(2);
+        var zPos = layerPos.getSeparationFollower( 2 );
 
         var depthCap = CTALaunch.depthCapacity;
         var fps = CTAScene.fps;
 
-        for (var i = 0; i < depth.length; ++i) {
+        for ( var i = 0; i < depth.length; ++i ) {
 
-            var zValue = depth[i].value / depthCap;
-            var keyTime = Math.round((depth[i].time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var zValue = depth[ i ].value / depthCap;
+            var keyTime = Math.round( ( depth[ i ].time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
             try {
 
-                var index = zPos.addKey(keyTime);
-                zPos.setValueAtKey(index, zValue);
-                zPos.setInterpolationTypeAtKey(index, KeyframeInterpolationType.HOLD);
+                var index = zPos.addKey( keyTime );
+                zPos.setValueAtKey( index, zValue );
+                zPos.setInterpolationTypeAtKey( index, KeyframeInterpolationType.HOLD );
             }
-            catch (e) {
+            catch ( e ) {
 
-                //alert( e.message );
+				//alert( e.message );
                 return false;
             }
         }
@@ -1799,25 +1811,25 @@
         return true;
     }
 
-    CTALaunch.Layer.Add.PositionKey = function (layer, jsonComp) {
+    CTALaunch.Layer.Add.PositionKey = function ( layer, jsonComp ) {
 
         var layerPos = layer.position;
-        var posKeys = CTALaunch.Layer.Calculate.Position(jsonComp.compObj);
+        var posKeys = CTALaunch.Layer.Calculate.Position( jsonComp.compObj );
 
         // add keys
-        for (var i = 0; i < posKeys.length; ++i) {
+        for ( var i = 0; i < posKeys.length; ++i ) {
 
-            var keyTime = posKeys[i].time;
-            var xTrans = posKeys[i].x;
-            var yTrans = posKeys[i].y;
-            var zTrans = posKeys[i].z;
+            var keyTime = posKeys[ i ].time;
+            var xTrans = posKeys[ i ].x;
+            var yTrans = posKeys[ i ].y;
+            var zTrans = posKeys[ i ].z;
 
             try {
 
-                var index = layerPos.addKey(keyTime);
-                layerPos.setValueAtKey(index, [xTrans, yTrans, zTrans]);
+                var index = layerPos.addKey( keyTime );
+                layerPos.setValueAtKey( index, [ xTrans, yTrans, zTrans ] );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -1825,13 +1837,13 @@
         }
 
         // set spatial interpolation to linear
-        for (var j = 1; j <= layerPos.numKeys; ++j) {
+        for ( var j = 1; j <= layerPos.numKeys; ++j ) {
 
             try {
 
-                layerPos.setSpatialTangentsAtKey(j, [0, 0, 0], [0, 0, 0]);
+                layerPos.setSpatialTangentsAtKey( j, [ 0, 0, 0 ], [ 0, 0, 0 ] );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -1841,31 +1853,31 @@
         return true;
     }
 
-    CTALaunch.Layer.Add.AnchorPointKey = function (layer, jsonComp) {
+    CTALaunch.Layer.Add.AnchorPointKey = function ( layer, jsonComp ) {
 
         var layerAnchor = layer.anchorPoint;
 
         // AE default anchor point is in the middle of image
         var imageCenter = { "x": layer.source.width / 2, "y": layer.source.height / 2, "z": 0 };
-        var anchorKeys = CTALaunch.Layer.Calculate.AnchorPoint(jsonComp.compObj, imageCenter);
+        var anchorKeys = CTALaunch.Layer.Calculate.AnchorPoint( jsonComp.compObj, imageCenter );
 
         // add keys
-        for (var i = 0; i < anchorKeys.length; ++i) {
+        for ( var i = 0; i < anchorKeys.length; ++i ) {
 
-            var pivotOffsetX = anchorKeys[i].x;
-            var pivotOffsetY = anchorKeys[i].y;
-            var pivotOffsetZ = anchorKeys[i].z;
-            var keyTime = anchorKeys[i].time;
+            var pivotOffsetX = anchorKeys[ i ].x;
+            var pivotOffsetY = anchorKeys[ i ].y;
+            var pivotOffsetZ = anchorKeys[ i ].z;
+            var keyTime = anchorKeys[ i ].time;
 
             try {
 
-                var index = layerAnchor.addKey(keyTime);
-                layerAnchor.setValueAtKey(index, [pivotOffsetX, pivotOffsetY, pivotOffsetZ]);
-                layerAnchor.setInterpolationTypeAtKey(index, KeyframeInterpolationType.HOLD);
+                var index = layerAnchor.addKey( keyTime );
+                layerAnchor.setValueAtKey( index, [ pivotOffsetX, pivotOffsetY, pivotOffsetZ ] );
+                layerAnchor.setInterpolationTypeAtKey( index, KeyframeInterpolationType.HOLD );
             }
-            catch (e) {
+            catch ( e ) {
 
-                //alert( e.message );
+				//alert( e.message );
                 return false;
             }
         }
@@ -1873,27 +1885,27 @@
         return true;
     }
 
-    CTALaunch.Layer.Add.ScaleKey = function (layer, jsonComp) {
+    CTALaunch.Layer.Add.ScaleKey = function ( layer, jsonComp ) {
 
         var layerScale = layer.scale;
         var compScale = { "x": jsonComp.compScale.scaleX, "y": jsonComp.compScale.scaleZ };
-        var scaleKeys = CTALaunch.Layer.Calculate.Scale(jsonComp.compObj, compScale);
+        var scaleKeys = CTALaunch.Layer.Calculate.Scale( jsonComp.compObj, compScale );
 
-        for (var i = 0; i < scaleKeys.length; ++i) {
+        for ( var i = 0; i < scaleKeys.length; ++i ) {
 
-            var xScale = scaleKeys[i].x;
-            var yScale = scaleKeys[i].y;
-            var zScale = scaleKeys[i].z;
-            var keyTime = scaleKeys[i].time;
+            var xScale = scaleKeys[ i ].x;
+            var yScale = scaleKeys[ i ].y;
+            var zScale = scaleKeys[ i ].z;
+            var keyTime = scaleKeys[ i ].time;
 
             try {
 
-                var index = layerScale.addKey(keyTime);
-                layerScale.setValueAtKey(index, [xScale, yScale, zScale]);
+                var index = layerScale.addKey( keyTime );
+                layerScale.setValueAtKey( index, [ xScale, yScale, zScale ] );
             }
-            catch (e) {
+            catch ( e ) {
 
-                //alert( e.message );
+				//alert( e.message );
                 return false;
             }
         }
@@ -1901,24 +1913,24 @@
         return true;
     }
 
-    CTALaunch.Layer.Add.RotationKey = function (layer, jsonComp) {
+    CTALaunch.Layer.Add.RotationKey = function ( layer, jsonComp ) {
 
         var layerRot = layer.rotation;
-        var rotKeys = CTALaunch.Layer.Calculate.Rotation(jsonComp.compObj);
+        var rotKeys = CTALaunch.Layer.Calculate.Rotation( jsonComp.compObj );
 
-        for (var i = 0; i < rotKeys.length; ++i) {
+        for ( var i = 0; i < rotKeys.length; ++i ) {
 
-            var rotate = rotKeys[i].value;
-            var keyTime = rotKeys[i].time;
+            var rotate = rotKeys[ i ].value;
+            var keyTime = rotKeys[ i ].time;
 
             try {
 
-                var index = layerRot.addKey(keyTime);
-                layerRot.setValueAtKey(index, rotate);
+                var index = layerRot.addKey( keyTime );
+                layerRot.setValueAtKey( index, rotate );
             }
-            catch (e) {
+            catch ( e ) {
 
-                //alert( e.message );
+				//alert( e.message );
                 return false;
             }
         }
@@ -1929,7 +1941,7 @@
     // calculate
     CTALaunch.Layer.Calculate = {};
 
-    CTALaunch.Layer.Calculate.Position = function (compObj) {
+    CTALaunch.Layer.Calculate.Position = function ( compObj ) {
 
         var keys = [];
         var jsonCompPosCount = compObj.posObjs.length;
@@ -1939,23 +1951,23 @@
         var transFactorX = CTALaunch.sceneRatio.width / CTALaunch.sceneRatio.scene;
         var transFactorY = CTALaunch.sceneRatio.height / CTALaunch.sceneRatio.scene;
 
-        for (var i = 0; i < jsonCompPosCount; ++i) {
+        for ( var i = 0; i < jsonCompPosCount; ++i ) {
 
-            var pos = compObj.posObjs[i];
+            var pos = compObj.posObjs[ i ];
 
             var xValue = pos.x * transFactorX;
             var yValue = -pos.z * transFactorY;
             var zValue = pos.y * camRatio;
-            var keyTime = Math.round((pos.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( pos.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue, "z": zValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue, "z": zValue } );
         }
 
         return keys;
     }
 
-    CTALaunch.Layer.Calculate.AnchorPoint = function (compObj, imageCenter) {
+    CTALaunch.Layer.Calculate.AnchorPoint = function ( compObj, imageCenter ) {
 
         var keys = [];
         var jsonPivotCount = compObj.pivot.length;
@@ -1964,23 +1976,23 @@
         var sceneRatio = CTALaunch.sceneRatio.scene;
         var fps = CTAScene.fps;
 
-        for (var i = 0; i < jsonPivotCount; ++i) {
+        for ( var i = 0; i < jsonPivotCount; ++i ) {
 
-            var pivot = compObj.pivot[i];
+            var pivot = compObj.pivot[ i ];
 
             var xValue = imageCenter.x - pivot.x / sceneRatio;
             var yValue = imageCenter.y + pivot.z / sceneRatio;
             var zValue = imageCenter.z - pivot.y * camRatio;
-            var keyTime = Math.round((pivot.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( pivot.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue, "z": zValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue, "z": zValue } );
         }
 
         return keys;
     }
 
-    CTALaunch.Layer.Calculate.Scale = function (compObj, compScale) {
+    CTALaunch.Layer.Calculate.Scale = function ( compObj, compScale ) {
 
         var keys = [];
 
@@ -1989,38 +2001,38 @@
         var fps = CTAScene.fps;
 
         var jsonComScaleCount = compObj.scaleObjs.length;
-        for (var i = 0; i < jsonComScaleCount; ++i) {
+        for ( var i = 0; i < jsonComScaleCount; ++i ) {
 
-            var scale = compObj.scaleObjs[i];
+            var scale = compObj.scaleObjs[ i ];
 
             var xValue = scale.x * scaleFactorX;
             var yValue = scale.z * scaleFactorY;
             var zValue = 100;
-            var keyTime = Math.round((scale.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( scale.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue, "z": zValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue, "z": zValue } );
         }
 
         return keys;
     }
 
-    CTALaunch.Layer.Calculate.Rotation = function (compObj) {
+    CTALaunch.Layer.Calculate.Rotation = function ( compObj ) {
 
         var keys = [];
         var radian = CTALaunch.radian;
         var fps = CTAScene.fps;
 
         var jsonComRotCount = compObj.rotObjs.length;
-        for (var i = 0; i < jsonComRotCount; ++i) {
+        for ( var i = 0; i < jsonComRotCount; ++i ) {
 
-            var rot = compObj.rotObjs[i];
+            var rot = compObj.rotObjs[ i ];
 
             var value = rot.y * radian;
-            var keyTime = Math.round((rot.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( rot.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "value": value });
+            keys.push( { "time": keyTime, "value": value } );
         }
 
         return keys;
@@ -2028,56 +2040,56 @@
 
 
     // ====================== | Image Layer |  =========================
-    CTALaunch.ImageLayer.Create = function (jsonComp, mainComp) {
+    CTALaunch.ImageLayer.Create = function ( jsonComp, mainComp ) {
 
         var fileSource;
 
-        if (jsonComp.hasVideo) {
+        if ( jsonComp.hasVideo ) {
 
-            fileSource = CTALaunch.Source.LoadVideo(jsonComp.name);
+            fileSource = CTALaunch.Source.LoadVideo( jsonComp.name );
         }
         else {
-
-            fileSource = CTALaunch.Source.LoadImage(jsonComp.compObj, jsonComp.name);
+            
+            fileSource = CTALaunch.Source.LoadImage( jsonComp.compObj, jsonComp.name );
         }
 
-        if (fileSource) {
+        if ( fileSource ) {
 
             fileSource.parentFolder = CTALaunch.folder.content;
-            mainComp.layers.add(fileSource);
+            mainComp.layers.add( fileSource );
 
-            var currentLayer = mainComp.layers[1];
+            var currentLayer = mainComp.layers[ 1 ];
             currentLayer.selected = false;
 
-            CTALaunch.ImageLayer.SetProperty(currentLayer, jsonComp);
-            CTALaunch.UI.UpdateImportLog("Create \"" + jsonComp.name + "\" image layer completed.");
+            CTALaunch.ImageLayer.SetProperty( currentLayer, jsonComp );
+            CTALaunch.UI.UpdateImportLog( "Create \"" + jsonComp.name + "\" image layer completed." );
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Create \"" + jsonComp.name + "\" image layer failed.");
+            CTALaunch.UI.UpdateImportLog( "Create \"" + jsonComp.name + "\" image layer failed." );
         }
     }
 
-    CTALaunch.ImageLayer.SetProperty = function (layer, jsonComp) {
+    CTALaunch.ImageLayer.SetProperty = function ( layer, jsonComp ) {
 
-        switch (CTALaunch.importType) {
+        switch ( CTALaunch.importType ) {
 
             case CTALaunch.jsonType.basic: {
 
                 // setup layer order
-                if (false == CTALaunch.Layer.Add.PositionKeyByDepth(layer, jsonComp.compObj.depth)) {
+                if ( false == CTALaunch.Layer.Add.PositionKeyByDepth( layer, jsonComp.compObj.depth ) ) {
 
-                    CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties failed.");
+                    CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties failed." );
                     return;
                 }
                 break;
             }
             case CTALaunch.jsonType.smart: {
 
-                if (false == (CTALaunch.ImageLayer.Add.PositionKey(layer, jsonComp)
-                    && CTALaunch.ImageLayer.Add.ScaleKey(layer, jsonComp))) {
+                if ( false == ( CTALaunch.ImageLayer.Add.PositionKey( layer, jsonComp )
+                             && CTALaunch.ImageLayer.Add.ScaleKey( layer, jsonComp ) ) ) {
 
-                    CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties failed.");
+                    CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties failed." );
                     return;
                 }
                 break;
@@ -2087,29 +2099,29 @@
                 return;
         }
 
-        CTALaunch.UI.UpdateImportLog("Set \"" + jsonComp.name + "\" layer properties completed.");
+        CTALaunch.UI.UpdateImportLog( "Set \"" + jsonComp.name + "\" layer properties completed." );
     }
 
     // add
     CTALaunch.ImageLayer.Add = {};
 
-    CTALaunch.ImageLayer.Add.PositionKey = function (layer, jsonComp) {
+    CTALaunch.ImageLayer.Add.PositionKey = function ( layer, jsonComp ) {
 
         var layerPos = layer.position;
-        var posKeys = CTALaunch.ImageLayer.Calculate.Position(jsonComp.compObj);
+        var posKeys = CTALaunch.ImageLayer.Calculate.Position( jsonComp.compObj );
 
-        for (var i = 0; i < posKeys.length; ++i) {
+        for ( var i = 0; i < posKeys.length; ++i ) {
 
-            var xTrans = posKeys[i].x;
-            var yTrans = posKeys[i].y
-            var keyTime = posKeys[i].time;
+            var xTrans = posKeys[ i ].x;
+            var yTrans = posKeys[ i ].y
+            var keyTime = posKeys[ i ].time;
 
             try {
 
-                var index = layerPos.addKey(keyTime);
-                layerPos.setValueAtKey(index, [xTrans, yTrans]);
+                var index = layerPos.addKey( keyTime );
+                layerPos.setValueAtKey( index, [ xTrans, yTrans ] );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -2117,13 +2129,13 @@
         }
 
         // set spatial interpolation to linear
-        for (var j = 1; j <= layerPos.numKeys; ++j) {
+        for ( var j = 1; j <= layerPos.numKeys; ++j ) {
 
             try {
 
-                layerPos.setSpatialTangentsAtKey(j, [0, 0, 0], [0, 0, 0]);
+                layerPos.setSpatialTangentsAtKey( j, [ 0, 0, 0 ], [ 0, 0, 0 ] );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -2133,24 +2145,24 @@
         return true;
     }
 
-    CTALaunch.ImageLayer.Add.ScaleKey = function (layer, jsonComp) {
+    CTALaunch.ImageLayer.Add.ScaleKey = function ( layer, jsonComp ) {
 
         var layerScale = layer.scale;
         var compScale = { "x": jsonComp.compScale.scaleX, "y": jsonComp.compScale.scaleZ };
-        var scaleKeys = CTALaunch.ImageLayer.Calculate.Scale(jsonComp.compObj, compScale);
+        var scaleKeys = CTALaunch.ImageLayer.Calculate.Scale( jsonComp.compObj, compScale );
 
-        for (var i = 0; i < scaleKeys.length; ++i) {
+        for ( var i = 0; i < scaleKeys.length; ++i ) {
 
-            var xScale = scaleKeys[i].x;
-            var yScale = scaleKeys[i].y;
-            var keyTime = scaleKeys[i].time;
+            var xScale = scaleKeys[ i ].x;
+            var yScale = scaleKeys[ i ].y;
+            var keyTime = scaleKeys[ i ].time;
 
             try {
 
-                var index = layerScale.addKey(keyTime);
-                layerScale.setValueAtKey(index, [xScale, yScale]);
+                var index = layerScale.addKey( keyTime );
+                layerScale.setValueAtKey( index, [ xScale, yScale ] );
             }
-            catch (e) {
+            catch ( e ) {
 
                 //alert( e.message );
                 return false;
@@ -2163,7 +2175,7 @@
     // calculate
     CTALaunch.ImageLayer.Calculate = {};
 
-    CTALaunch.ImageLayer.Calculate.Position = function (objData) {
+    CTALaunch.ImageLayer.Calculate.Position = function ( objData ) {
 
         var keys = [];
         var posLength = objData.posObjs.length;
@@ -2172,22 +2184,22 @@
         var transFactorX = CTALaunch.sceneRatio.width / CTALaunch.sceneRatio.scene;
         var transFactorY = CTALaunch.sceneRatio.height / CTALaunch.sceneRatio.scene;
 
-        for (var i = 0; i < posLength; ++i) {
+        for ( var i = 0; i < posLength; ++i ) {
 
-            var pos = objData.posObjs[i];
+            var pos = objData.posObjs[ i ];
 
             var xValue = pos.x * transFactorX + CTAScene.width / 2;
             var yValue = -pos.z * transFactorY + CTAScene.height / 2;
-            var keyTime = Math.round((pos.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( pos.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue } );
         }
 
         return keys;
     }
 
-    CTALaunch.ImageLayer.Calculate.Scale = function (objData, compScale) {
+    CTALaunch.ImageLayer.Calculate.Scale = function ( objData, compScale ) {
 
         var keys = [];
         var scaleLength = objData.scaleObjs.length;
@@ -2196,16 +2208,16 @@
         var scaleFactorY = compScale.y * CTALaunch.sceneRatio.height * 100;
         var fps = CTAScene.fps;
 
-        for (var i = 0; i < scaleLength; ++i) {
+        for ( var i = 0; i < scaleLength; ++i ) {
 
-            var scale = objData.scaleObjs[i];
+            var scale = objData.scaleObjs[ i ];
 
             var xValue = scale.x * scaleFactorX;
             var yValue = scale.z * scaleFactorY;
-            var keyTime = Math.round((scale.time - CTALaunch.timeShift) * fps * 1000) / 1000;
-            keyTime = Math.round(keyTime) / fps;
+            var keyTime = Math.round( ( scale.time - CTALaunch.timeShift ) * fps * 1000 ) / 1000;
+            keyTime = Math.round( keyTime ) / fps;
 
-            keys.push({ "time": keyTime, "x": xValue, "y": yValue });
+            keys.push( { "time": keyTime, "x": xValue, "y": yValue } );
         }
 
         return keys;
@@ -2213,46 +2225,46 @@
 
 
     // ======================= | Background |  =========================
-    CTALaunch.Background.Create = function (jsonBackground, mainComp) {
+    CTALaunch.Background.Create = function ( jsonBackground, mainComp ) {
 
         var layerName = "Background";
         var fileSource;
 
-        if (jsonBackground.hasVideo) {
+        if ( jsonBackground.hasVideo ) {
 
-            fileSource = CTALaunch.Source.LoadVideo(layerName);
+            fileSource = CTALaunch.Source.LoadVideo( layerName );
         }
         else {
 
-            fileSource = CTALaunch.Source.LoadImage(jsonBackground, layerName);
+            fileSource = CTALaunch.Source.LoadImage( jsonBackground, layerName );
         }
-
-        if (fileSource) {
+        
+        if ( fileSource ) {
 
             fileSource.parentFolder = CTALaunch.folder.content;
-            mainComp.layers.add(fileSource);
+            mainComp.layers.add( fileSource );
 
-            var currentLayer = mainComp.layers[1];
+            var currentLayer = mainComp.layers[ 1 ];
             currentLayer.selected = false;
 
-            CTALaunch.Background.SetProperty(currentLayer);
-            CTALaunch.UI.UpdateImportLog("Create background layer completed.");
+            CTALaunch.Background.SetProperty( currentLayer );
+            CTALaunch.UI.UpdateImportLog( "Create background layer completed." );
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Create background layer failed.");
+            CTALaunch.UI.UpdateImportLog( "Create background layer failed." );
         }
     }
 
-    CTALaunch.Background.SetProperty = function (layer) {
+    CTALaunch.Background.SetProperty = function ( layer ) {
 
-        switch (CTALaunch.importType) {
+        switch ( CTALaunch.importType ) {
 
             case CTALaunch.jsonType.smart: {
 
-                if (false == CTALaunch.Background.Add.ScaleKey(layer)) {
+                if ( false == CTALaunch.Background.Add.ScaleKey( layer ) ) {
 
-                    CTALaunch.UI.UpdateImportLog("Set background layer properties failed");
+                    CTALaunch.UI.UpdateImportLog( "Set background layer properties failed" );
                     return;
                 }
                 break;
@@ -2263,13 +2275,13 @@
                 return;
         }
 
-        CTALaunch.UI.UpdateImportLog("Set background layer properties completed");
+        CTALaunch.UI.UpdateImportLog( "Set background layer properties completed" );
     }
 
     // add
     CTALaunch.Background.Add = {};
 
-    CTALaunch.Background.Add.ScaleKey = function (layer) {
+    CTALaunch.Background.Add.ScaleKey = function ( layer ) {
 
         var layerScale = layer.scale;
 
@@ -2281,9 +2293,9 @@
 
         try {
 
-            layerScale.setValue([xScale, yScale]);
+            layerScale.setValue( [ xScale, yScale ] );
         }
-        catch (e) {
+        catch ( e ) {
 
             //alert( e.message );
             return false;
@@ -2294,68 +2306,68 @@
 
 
     // ========================= | Audio | =============================
-    CTALaunch.Audio.Create = function (audioName, mainComp) {
+    CTALaunch.Audio.Create = function ( audioName, mainComp ) {
 
-        var audioSource = CTALaunch.Source.LoadAudio(audioName);
-        if (audioSource) {
+        var audioSource = CTALaunch.Source.LoadAudio( audioName );
+        if ( audioSource ) {
 
             audioSource.parentFolder = CTALaunch.folder.content;
-            mainComp.layers.add(audioSource);
-            mainComp.layers[1].selected = false;
+            mainComp.layers.add( audioSource );
+            mainComp.layers[ 1 ].selected = false;
 
-            CTALaunch.UI.UpdateImportLog("Create \"" + audioName + "\" audio layer completed.");
+            CTALaunch.UI.UpdateImportLog( "Create \"" + audioName + "\" audio layer completed." );
         }
         else {
 
-            CTALaunch.UI.UpdateImportLog("Create \"" + audioName + "\" audio layer failed.");
+            CTALaunch.UI.UpdateImportLog( "Create \"" + audioName + "\" audio layer failed." );
         }
     }
 
-    CTALaunch.Audio.Project.Create = function (mainComp) {
+    CTALaunch.Audio.Project.Create = function ( mainComp ) {
 
         var bgmLength = CTALaunch.projectAudioName.length;
-        for (var i = 0; i < bgmLength; ++i) {
+        for ( var i = 0; i < bgmLength; ++i ) {
 
-            if (false === CTAScene.projectAudio[i]) {
+            if ( false === CTAScene.projectAudio[ i ] ) {
 
                 continue;
             }
 
             // Append Mode
-            if (CTALaunch.appendMode && isProjectAlreadyExist(CTALaunch.projectAudioName[i])) {
+            if ( CTALaunch.appendMode && isProjectAlreadyExist( CTALaunch.projectAudioName[ i ] ) ) {
 
                 continue;
             }
-
-            var audio = CTALaunch.Source.LoadAudio(CTALaunch.projectAudioName[i]);
-            if (audio) {
+            
+            var audio = CTALaunch.Source.LoadAudio( CTALaunch.projectAudioName[ i ] );
+            if ( audio ) {
 
                 audio.parentFolder = CTALaunch.folder.content;
-                mainComp.layers.add(audio);
+                mainComp.layers.add( audio );
 
-                CTALaunch.UI.UpdateImportLog("Create \"" + CTALaunch.projectAudioName[i] + "\" audio layer completed.");
+                CTALaunch.UI.UpdateImportLog( "Create \"" + CTALaunch.projectAudioName[ i ] + "\" audio layer completed." );
             }
             else {
 
-                CTALaunch.UI.UpdateImportLog("Create \"" + CTALaunch.projectAudioName[i] + "\" audio layer failed.");
+                CTALaunch.UI.UpdateImportLog( "Create \"" + CTALaunch.projectAudioName[ i ] + "\" audio layer failed." );
             }
         }
     }
 
 
     // ======================== | Settings | ===========================
-    CTALaunch.SetProject = function (composition, folder) {
+    CTALaunch.SetProject = function ( composition, folder ) {
 
         CTALaunch.composition = composition;
         CTALaunch.folder = folder;
     }
 
-    CTALaunch.SetSceneRatio = function (importScene) {
+    CTALaunch.SetSceneRatio = function ( importScene ) {
 
         CTALaunch.sceneRatio.scene = importScene.sceneRatio;
 
-        var sceneWidth = Math.abs(CTAScene.viewCornerLT[0] - CTAScene.viewCornerRB[0]) / importScene.sceneRatio;
-        var sceneHeight = Math.abs(CTAScene.viewCornerLT[2] - CTAScene.viewCornerRB[2]) / importScene.sceneRatio;
+        var sceneWidth = Math.abs( CTAScene.viewCornerLT[ 0 ] - CTAScene.viewCornerRB[ 0 ] ) / importScene.sceneRatio;
+        var sceneHeight = Math.abs( CTAScene.viewCornerLT[ 2 ] - CTAScene.viewCornerRB[ 2 ] ) / importScene.sceneRatio;
         var widthRatio = CTAScene.width / sceneWidth;
         var heightRatio = CTAScene.height / sceneHeight;
 
@@ -2363,21 +2375,21 @@
         CTALaunch.sceneRatio.height = heightRatio;
     }
 
-    CTALaunch.SetCameraRatio = function (importScene) {
+    CTALaunch.SetCameraRatio = function ( importScene ) {
 
         var value = importScene.camera.camLens * CTALaunch.cameraFLM;
-        CTALaunch.cameraRatio = Math.abs(value / CTALaunch.standardZinCTACam);
+        CTALaunch.cameraRatio = Math.abs( value / CTALaunch.standardZinCTACam );
     }
 
     CTALaunch.SetTimeShift = function () {
 
         // AE startTime is zero, CTA is 1
         // CTA's key time does not change by fps, so the devide value must be the default value 30
-        CTALaunch.timeShift = Math.round(((CTAScene.Create.startFrame - 1) / 30) * 1000) / 1000;
+        CTALaunch.timeShift = Math.round( ( ( CTAScene.Create.startFrame - 1 ) / 30 ) * 1000 ) / 1000;
     }
 
-    CTALaunch.Init = function () {
-
+    CTALaunch.Init = function() {
+  
         CTALaunch.sceneRatio = { scene: 1, width: 1, height: 1 };
         CTALaunch.cameraRatio = 1;
         CTALaunch.timeShift = 0;
@@ -2397,12 +2409,12 @@
 
         try {
 
-            CTALaunch.UI.Show(thisObj);
+            CTALaunch.UI.Show( thisObj );
         }
-        catch (e) {
+        catch( e ) {
 
-            alert(e.message);
-        }
+            alert( e.message );
+        }      
     }
 
 
@@ -2410,12 +2422,19 @@
     function getCTAMainFolder() {
 
         var folder;
-        var folderName = "CTA_" + CTAScene.name;
+        var folderName =  "CTA_" + CTAScene.name;
+        var itemCount = 0;
+        
+        try {
 
-        for (var i = 1; i <= app.project.numItems; ++i) {
+            itemCount = app.project.numItems;
+        }
+        catch ( e ) {}
 
-            var item = app.project.items[i];
-            if (item instanceof FolderItem && item.name == folderName) {
+        for ( var i = 1; i <= itemCount; ++i ) {
+
+            var item = app.project.items[ i ];
+            if ( item instanceof FolderItem && item.name == folderName ) {
 
                 folder = item;
                 break;
@@ -2426,36 +2445,39 @@
     }
 
     function getCTAProject() {
-
+             
         var comp = {};
         var folder = {};
-        folder.main = getCTAMainFolder();
+        folder.main =  getCTAMainFolder();
 
-        for (var i = 1; i <= folder.main.numItems; ++i) {
-            var item = folder.main.items[i];
-            if (item instanceof FolderItem && item.name == "Content") {
+        for ( var i = 1; i <= folder.main.numItems; ++i ) {
+            
+            var item = folder.main.items[ i ];
+            if ( item instanceof FolderItem && item.name == "Content" ) {
+               
                 folder.content = item;
             }
-            else if (item instanceof CompItem && item.name == CTAScene.name) {
+            else if ( item instanceof CompItem && item.name == CTAScene.name ) {
+                
                 comp.main = item;
             }
         }
-
-        var project = {};
+    
+        var project =  {};
         project.comp = comp;
         project.folder = folder;
 
         return project;
     }
 
-    function isProjectAlreadyExist(name) {
+    function isProjectAlreadyExist( name ) {
 
         var comp = CTALaunch.composition.main;
 
-        for (var i = 1; i <= comp.numLayers; ++i) {
+        for ( var i = 1; i <= comp.numLayers; ++i ) {
 
-            var itemName = comp.layers[i].name;
-            if (itemName == name) {
+            var itemName = comp.layers[ i ].name; 
+            if ( itemName == name ) {
 
                 return true;
             }
@@ -2464,16 +2486,16 @@
         return false;
     }
 
-    function isNonAudioTwoDLayer(layer) {
+    function isNonAudioTwoDLayer( layer ) {
 
         // not camera
-        if (layer instanceof AVLayer) {
+        if ( layer instanceof AVLayer ) {
 
             // not composition
-            if (layer.source instanceof FootageItem) {
+            if ( layer.source instanceof FootageItem ) {
 
-                if (false == layer.threeDLayer
-                    && (layer.hasVideo || (false == layer.hasAudio && false == layer.hasVideo))) {
+                if ( false == layer.threeDLayer 
+                  && ( layer.hasVideo || ( false == layer.hasAudio && false == layer.hasVideo ) ) ) {
 
                     return true;
                 }
@@ -2483,8 +2505,9 @@
         return false;
     }
 
-
+    
     //=============================| Main |=============================
     CTALaunch.Main();
 
-})(this)
+
+} ) ( this )
