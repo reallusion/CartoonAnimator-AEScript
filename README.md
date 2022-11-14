@@ -7,7 +7,7 @@ Requirement
 1. Cartoon Animator - AE Script is an AE script associated with software Cartoon Animator. User must have installed the full version of Cartoon Animator 5 to run this plug-in.
 You can click here: https://www.reallusion.com/cartoon-animator/ae-script-animation-vfx.html for more information about Cartoon Animator
 
-2. To run this Cartoon Animator - AE Script, please make sure your After Effect software compatibility: CC 2018~2022, CS5~6.
+2. To run this Cartoon Animator - AE Script, please make sure your After Effect software compatibility: CC 2018 ~ 2022, CS5 ~ 6.
 
 ----------------------------------------------------------------
 What is Cartoon Animator? & What is Cartoon Animator - AE Script 
