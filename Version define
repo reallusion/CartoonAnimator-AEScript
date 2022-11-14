@@ -1,0 +1,26 @@
+Version define
+
+Script version :    CTALaunch.version
+Json file version : CTAScene.version
+
+Example :
+Script version : 1.2
+1  -> major version
+.2 -> minor version
+
+Allowed version match :
+Script version equals json file version
+or script version is older than json file version and have the same major version.
+
+Match example:
+   | Script version | Json file version |
+O         1.0               1.0
+X         1.0               1.1
+O         1.1               1.0
+O         1.1               1.1
+X         1.1               1.5
+O         1.9               1.8
+X         1.9               2.0
+O         2.0               2.0
+X         2.0               1.9
+O         2.3               2.1
